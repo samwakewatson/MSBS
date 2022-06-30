@@ -56,17 +56,13 @@ def main():
         # calculate the simulation results (e.g., block statstics and miners' rewards)
         Statistics.calculate()
 
-        if p.model == 3:
-            Statistics.print_to_excel(i, True)
-            Statistics.reset()
-        else:
-            ########## reset all global variable before the next run #############
-            Statistics.reset()  # reset all variables used to calculate the results
-            Node.resetState()  # reset all the states (blockchains) for all nodes in the network
-            fname = "(Allverify)1day_{0}M_{1}K.xlsx".format(
-                p.Bsize/1000000, p.Tn/1000)
-            # print all the simulation results in an excel file
-            Statistics.print_to_excel(fname)
+        ########## reset all global variable before the next run #############
+        Statistics.reset()  # reset all variables used to calculate the results
+        Node.resetState()  # reset all the states (blockchains) for all nodes in the network
+        fname = "(Allverify)1day_{0}M_{1}K.xlsx".format(
+            p.Bsize/1000000, p.Tn/1000)
+        # print all the simulation results in an excel file
+        Statistics.print_to_excel(fname)
         fname = "(Allverify)1day_{0}M_{1}K.xlsx".format(
                 p.Bsize/1000000, p.Tn/1000)
         # print all the simulation results in an excel file
