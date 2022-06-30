@@ -27,6 +27,7 @@ elif p.model == 4:
 from Consensus.Delay import Consensus
 from Primitives.Transaction import LightTransaction as LT, FullTransaction as FT
 from Primitives.Node import Node
+from Primitives.BlockCommit import BlockCommit
 
 ########################################################## Start Simulation ##############################################################
 def main():
