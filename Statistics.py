@@ -1,5 +1,5 @@
 from Config import Config as p
-from Consensus.Consensus import Consensus as c
+from Consensus.BaseConsensus import Consensus as c
 #from Models.Incentives import Incentives
 from Network.Network import Network
 import pandas as pd

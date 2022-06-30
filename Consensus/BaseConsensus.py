@@ -3,6 +3,7 @@ from Config import Config as p
 from Primitives.Node import Node
 import random
 
+
 #Realisitically all of this needs tearing apart
 class Consensus:
     #Note this obviously won't work
