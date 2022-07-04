@@ -39,7 +39,7 @@ class Consensus(BaseConsensus):
         c = 0.15 # protocol parameter - probably not the same as used in harmony ONE?
         stakes = []
         for node in p.NODES:
-            stakes.append(node.hashPower)
+            stakes.append(node.stake)
         medianStake = median(stakes)
         for node in p.NODES:
             node.effectiveStake = max(min((1+c)*medianStake,node.hashPower),(1-c)*medianStake)
@@ -47,6 +47,7 @@ class Consensus(BaseConsensus):
 
     #SUS AF - doesn't actually do anything even vaguely similar to what we want to do
     def assign_leaders():
+        p.slotLeaders = []
         for s in range(0,p.numShards):
             x = []
             for node in p.NODES:
@@ -56,14 +57,14 @@ class Consensus(BaseConsensus):
             
     #this probably shouldn't be here
     def calculate_votes(miner):
-        TOTAL_STAKE = sum([miner.hashPower for miner in p.NODES])
+        TOTAL_STAKE = sum([miner.stake for miner in p.NODES])
         securityParam = 600 #harmony one says > 600, maybe too high for the tiny network we're looking at, or maybe need to increase node stakes idk
         #implementing Harmony ONE's Pvote method                            
         # 
         
         
         pVote = TOTAL_STAKE/(p.numShards*securityParam)
-        return int(miner.hashPower / pVote)
+        return int(miner.stake / pVote)
 
         #convert each miner's stake into a number of votes
         #randomly assign each vote to a committee
@@ -111,5 +112,20 @@ class Consensus(BaseConsensus):
                 break'''
 
     #OMEGA CURSED - just takes the blockchain of the first node, needs urgent fixing
+    #def fork_resolution():
+    #s    BaseConsensus.global_chain=p.NODES[0].blockchain
+
     def fork_resolution():
-        BaseConsensus.global_chain=p.NODES[0].blockchain
+        #we need to find the longest chain for each node
+        #so if we have a proper model of the consensus structure, we can 
+        #need to be careful about a new epoch occurring right at the end
+        longestChains = [0] * p.numShards #store node IDs that have the longest chain of each shard - note that we might have a difference of like 1 block
+        for i in range(0,p.Nn):
+            for s in range(0,p.numShards):
+                if len(p.NODES[i].blockchain[s]) > len(p.NODES[longestChains[s]].blockchain[s]):
+                    longestChains[s] = i
+        for s in range(0,p.numShards):
+            BaseConsensus.global_chain.append(p.NODES[longestChains[s]].blockchain[s])
+
+
+

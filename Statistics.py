@@ -35,12 +35,10 @@ class Statistics:
         Statistics.staleBlocks = Statistics.totalBlocks - Statistics.mainBlocks
         for s in range(0,p.numShards):
             for b in c.global_chain[s]:
-                if p.model==2: Statistics.uncleBlocks += len(b.uncles)
-                else: Statistics.uncleBlocks = 0
+                Statistics.uncleBlocks = 0
                 trans += len(b.transactions)
         Statistics.staleRate= round(Statistics.staleBlocks/Statistics.totalBlocks * 100, 2)
-        if p.model==2: Statistics.uncleRate= round(Statistics.uncleBlocks/Statistics.totalBlocks * 100, 2)
-        else: Statistics.uncleRate==0
+        Statistics.uncleRate==0
         Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans]
         Statistics.blocksResults+=[Statistics.blockData]
 
@@ -72,16 +70,11 @@ class Statistics:
 
     ########################################################### prepare the global chain  ###########################################################################################
     def global_chain():
-        if p.model==0 or p.model==1 or p.model == 4:
-            for s in range(0,p.numShards):
-                Statistics.chain.append([])
-                for i in c.global_chain[s]:
-                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
-                        Statistics.chain[s] +=[block]
-        elif p.model==2:
-                for i in c.global_chain:
-                        block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.usedgas, len(i.uncles)]
-                        Statistics.chain +=[block]
+        for s in range(0,p.numShards):
+            Statistics.chain.append([])
+            for i in c.global_chain[s]:
+                    block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
+                    Statistics.chain[s] +=[block]
 
     ########################################################### Print simulation results to Excel ###########################################################################################
     def print_to_excel(fname):
@@ -99,8 +92,7 @@ class Statistics:
         for s in range(0,p.numShards):
             df4.append(pd.DataFrame(Statistics.chain[s]))
             #df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions','Block Size']
-            if p.model==2: df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions','Block Limit', 'Uncle Blocks']
-            else: df4[s].columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size']
+            df4[s].columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size']
 
         df5 = pd.DataFrame(Network.latencyTable)
         df5.columns = [i for i in range(0, p.Nn)]

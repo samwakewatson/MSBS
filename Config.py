@@ -33,23 +33,23 @@ class Config:
     Binterval = 30  # Average time (in seconds)for creating a block in the blockchain
     Bsize = 1.0
     Blimit = 8000000  # Gas limit
-    Bdelay = 1  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
+    Bdelay = 0.2  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
     Breward = 12.5  # Reward for mining a block
-    slotTime = 2 #time each slot takes - doesn't exactly mimic harmony
+    slotTime = 4 #time each slot takes - doesn't exactly mimic harmony
     epochLength = 128 #how many slots in an epoch - node only the beacon chain determines epoch in harmonyONE
     slotLeaders = [] 
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
-    Ttechnique = "Full"  # Full/Light to specify the way of modelling transactions
-    Tn = 1000  # The rate of the number of transactions to be created per second
+    Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
+    Tn = 10  # The rate of the number of transactions to be created per second
     # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 10  # the total number of nodes in the network
+    Nn = 150  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
@@ -60,7 +60,7 @@ class Config:
     numShards = 4
 
     ''' Simulation Parameters '''
-    simTime = 1000  # the simulation length (in seconds)
+    simTime = 4000  # the simulation length (in seconds)
     Runs = 1  # Number of simulation runs
 
 

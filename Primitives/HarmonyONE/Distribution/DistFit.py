@@ -7,7 +7,7 @@ Created on Mon Aug 26 19:11:48 2019
 import numpy as np
 from sklearn.mixture import GaussianMixture
 from sklearn.ensemble import RandomForestRegressor
-from InputsConfig import InputsConfig as p
+from Config import Config as p
 import pandas as pd
 
 """ A class to fit distribution to Ethereum transaction attributes, which are 
@@ -24,12 +24,12 @@ class DistFit():
     x=0
 
     def fit():
-          if DistFit.x<1:
-          	df= pd.read_excel("Models/Ethereum/Distribution/Data_sets.xlsx",sheet_name="Set1")
-          	df2= pd.read_excel("Models/Ethereum/Distribution/Data_sets.xlsx",sheet_name="Set2")
-          	DistFit.cgas,DistFit.cprice,DistFit.ctime= DistFit.creation_fit(df) # fitted models (u:used gas, p: gas price, t: cpu time)
-          	DistFit.egas,DistFit.eprice,DistFit.etime= DistFit.execution_fit(df2)
-          	DistFit.x+=1
+        if DistFit.x<1:
+            df= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xlsx",sheet_name="Set1")
+            df2= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xlsx",sheet_name="Set2")
+            DistFit.cgas,DistFit.cprice,DistFit.ctime= DistFit.creation_fit(df) # fitted models (u:used gas, p: gas price, t: cpu time)
+            DistFit.egas,DistFit.eprice,DistFit.etime= DistFit.execution_fit(df2)
+            DistFit.x+=1
 
 
     def creation_fit(df):

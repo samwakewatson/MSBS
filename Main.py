@@ -24,10 +24,10 @@ elif p.model == 4:
     from Models.HarmonyONE.Node import Node
     from Models.Incentives import Incentives'''
 
-from Consensus.Delay import Consensus
-from Primitives.Transaction import LightTransaction as LT, FullTransaction as FT
-from Primitives.Node import Node
-from Primitives.BlockCommit import BlockCommit
+from Consensus.HarmonyONE import Consensus
+from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
+from Primitives.HarmonyONE.Node import Node
+from Primitives.HarmonyONE.BlockCommit import BlockCommit
 
 ########################################################## Start Simulation ##############################################################
 def main():
@@ -46,7 +46,6 @@ def main():
         while not Queue.isEmpty() and clock <= p.simTime:
             next_event = Queue.get_next_event()
             clock = next_event.time  # move clock to the time of the event
-            print(next_event.time)
             BlockCommit.handle_event(next_event)
             Queue.remove_event(next_event)
 

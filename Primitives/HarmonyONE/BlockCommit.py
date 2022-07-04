@@ -3,9 +3,10 @@ from Config import Config as p
 from Primitives.HarmonyONE.Node import Node
 from Statistics import Statistics
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
-from Network.Network import Network
 from Consensus.HarmonyONE import Consensus as c
+from Consensus.FBFT import Consensus as FBFT
 from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
+from Primitives.Block import Block
 import random
 import numpy as np
 
@@ -24,9 +25,19 @@ class BlockCommit(BaseBlockCommit):
 
     # Block Creation Event - need to add shard logic
     def generate_block (event):
+
+        '''block = Block()
+        block.miner = miner.id
+        block.depth = len(miner.blockchain[shard])
+        block.id = random.randrange(100000000000)
+        block.previous = miner.last_block(shard).id
+        block.timestamp = eventTime
+        block.shard = shard'''
+
         miner = p.NODES[event.block.miner]
         minerId = miner.id
         eventTime = event.time
+        event.block.previous = miner.last_block(event.block.shard).id
         blockPrev = event.block.previous
         blockShard = event.block.shard
 
@@ -61,7 +72,7 @@ class BlockCommit(BaseBlockCommit):
 
     #where should this go??
     def assign_committees():
-        TOTAL_STAKE = sum([miner.hashPower for miner in p.NODES])
+        TOTAL_STAKE = sum([miner.stake for miner in p.NODES])
         securityParam = 600 #maybe too high for the tiny network we're looking at, or maybe need to increase node stakes idk
         #implementing Harmony ONE's Pvote method
         pVote = TOTAL_STAKE/(p.numShards*securityParam)
@@ -103,6 +114,8 @@ class BlockCommit(BaseBlockCommit):
         for node in p.NODES:
             node.committees = random.choice(committeeOptions)
 
+        c.assign_leaders()
+
 
     # Block Receiving Event - we want to modify this, or where it's called so that we don't instantly update the chain.
     #We have to take into account the time it takes to download and verify each block
@@ -141,44 +154,52 @@ class BlockCommit(BaseBlockCommit):
                  Scheduler.create_block_event(node,blockTime)'''
 
     def generate_initial_events():
-            currentTime=0
-            allVotes = []
-            #put in all the slots and epochs
-            while (currentTime < p.simTime):
-                if (currentTime % (p.epochLength * p.slotTime)) == 0:
-                    Scheduler.new_epoch_event(currentTime)
-                currentTime = currentTime + p.slotTime
-                Scheduler.new_slot_event(currentTime)
+        currentTime=0
+        allVotes = []
+        #put in all the slots and epochs
+        '''while (currentTime < p.simTime):
+            if (currentTime % (p.epochLength * p.slotTime)) == 0:
+                Scheduler.new_epoch_event(currentTime)
+            currentTime = currentTime + p.slotTime
+            Scheduler.new_slot_event(currentTime)'''
 
-            #assign all of the nodes votes in the various committees
-            #this needs to be completely changed -effective stake changes the game
-            '''for node in p.NODES:
-                votes = c.calculate_votes(node)
-                for v in range(0, votes):
-                    allVotes.append(node.id)
-            random.shuffle(allVotes)
-            committeeSize = int(len(allVotes) / p.numShards)
-            #print(allVotes)
-            committees = [allVotes[x:x+committeeSize] for x in range(0, len(allVotes), committeeSize)]
-            for node in p.NODES:
-                for s in range(0, p.numShards):
-                    node.committees.append(committees[s].count(node.id))'''
-            committeeOptions = []
-            for i in range(0,p.numShards):
-                x = np.zeros(p.numShards)
-                x[i] = 1
-                committeeOptions.append(x)
+        Scheduler.new_slot_event(0.01)
+        #assign all of the nodes votes in the various committees
+        #this needs to be completely changed -effective stake changes the game
+        '''for node in p.NODES:
+            votes = c.calculate_votes(node)
+            for v in range(0, votes):
+                allVotes.append(node.id)
+        random.shuffle(allVotes)
+        committeeSize = int(len(allVotes) / p.numShards)
+        #print(allVotes)
+        committees = [allVotes[x:x+committeeSize] for x in range(0, len(allVotes), committeeSize)]
+        for node in p.NODES:
+            for s in range(0, p.numShards):
+                node.committees.append(committees[s].count(node.id))'''
+        committeeOptions = []
+        for i in range(0,p.numShards):
+            x = np.zeros(p.numShards)
+            x[i] = 1
+            committeeOptions.append(x)
 
-            for node in p.NODES:
-                node.committees = random.choice(committeeOptions)
-            #for node in p.NODES:
-                #print(node.committees)
-            c.assign_leaders()
-            #for node in p.NODES:
-            #    BlockCommit.generate_next_block(node,currentTime)
+        for node in p.NODES:
+            node.committees = random.choice(committeeOptions)
+        #for node in p.NODES:
+            #print(node.committees)
+        c.assign_leaders()
+        #for node in p.NODES:
+        #    BlockCommit.generate_next_block(node,currentTime)
                 
     def propagate_block (block):
-        for recipient in p.NODES:
+        '''for recipient in p.NODES:
             if recipient.id != block.miner:
                 blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) # draw block propagation delay from a distribution !! or you can assign 0 to ignore block propagation delay
-                Scheduler.receive_block_event(recipient,block,blockDelay)
+                Scheduler.receive_block_event(recipient,block,blockDelay)'''
+        delay = FBFT.timeToReachConsensus(block.miner, [node.id for node in p.NODES if node.committees[block.shard] != 0])
+        for recipient in p.NODES:
+            Scheduler.receive_block_event(recipient, block, delay)
+        #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
+        if block.depth %  p.epochLength == 0 and block.shard == 0:
+            Scheduler.new_epoch_event(block.timestamp)
+        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 0.001)
