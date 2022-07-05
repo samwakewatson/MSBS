@@ -41,8 +41,8 @@ class Config:
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
-    Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
-    Tn = 10  # The rate of the number of transactions to be created per second
+    Ttechnique = "Full"  # Full/Light to specify the way of modelling transactions
+    Tn = 100  # The rate of the number of transactions to be created per second
     # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
@@ -58,9 +58,10 @@ class Config:
 
     '''Shard Parameters'''
     numShards = 4
+    cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each 
 
     ''' Simulation Parameters '''
-    simTime = 4000  # the simulation length (in seconds)
+    simTime = 1000  # the simulation length (in seconds)
     Runs = 1  # Number of simulation runs
 
 

@@ -38,6 +38,7 @@ class BlockCommit(BaseBlockCommit):
         minerId = miner.id
         eventTime = event.time
         event.block.previous = miner.last_block(event.block.shard).id
+        event.block.depth = miner.last_block(event.block.shard).depth + 1
         blockPrev = event.block.previous
         blockShard = event.block.shard
 
@@ -68,26 +69,6 @@ class BlockCommit(BaseBlockCommit):
             for s in range(0,p.numShards):
                 if c.Protocol(node, s):
                     Scheduler.create_block_event(node, s, event.time)'''
-
-
-    #where should this go??
-    def assign_committees():
-        TOTAL_STAKE = sum([miner.stake for miner in p.NODES])
-        securityParam = 600 #maybe too high for the tiny network we're looking at, or maybe need to increase node stakes idk
-        #implementing Harmony ONE's Pvote method
-        pVote = TOTAL_STAKE/(p.numShards*securityParam)
-
-        #for node in p.NODES:
-        #    for i in range(0,)
-
-        #convert each miner's stake into a number of votes
-        #randomly assign each vote to a committee
-        #badabing badaboom 
-
-    #we need the bounded cuckoo rule version of this.
-    #what support do we have for nodes going from zero stake to nonzero stake? i.e. changing stake
-    #we need a new event to alter the active stake of a node
-    #def shuffle_committees(event):
         
 
     #this version shuffles all of the committees, which would have a massive overhead
@@ -200,6 +181,6 @@ class BlockCommit(BaseBlockCommit):
         for recipient in p.NODES:
             Scheduler.receive_block_event(recipient, block, delay)
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
-        if block.depth %  p.epochLength == 0 and block.shard == 0:
+        if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
             Scheduler.new_epoch_event(block.timestamp)
         Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 0.001)

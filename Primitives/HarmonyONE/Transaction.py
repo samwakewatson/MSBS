@@ -152,7 +152,7 @@ class FullTransaction():
         pool= miner.transactionsPool
 
         while count < len(pool):
-                if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shard == shard):
+                if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom == shard):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas

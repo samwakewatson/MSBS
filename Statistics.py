@@ -31,7 +31,7 @@ class Statistics:
     def blocks_results():
         trans = 0
 
-        Statistics.mainBlocks= len(c.global_chain)-1
+        Statistics.mainBlocks= sum([len(i) - 1 for i in c.global_chain])
         Statistics.staleBlocks = Statistics.totalBlocks - Statistics.mainBlocks
         for s in range(0,p.numShards):
             for b in c.global_chain[s]:
@@ -73,7 +73,11 @@ class Statistics:
         for s in range(0,p.numShards):
             Statistics.chain.append([])
             for i in c.global_chain[s]:
-                    block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size]
+                    blockCopies = 0
+                    for j in range(0,p.Nn):
+                        if len(p.NODES[j].blockchain[s]) > i.depth:
+                            blockCopies += 1
+                    block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size, blockCopies]
                     Statistics.chain[s] +=[block]
 
     ########################################################### Print simulation results to Excel ###########################################################################################
@@ -92,7 +96,7 @@ class Statistics:
         for s in range(0,p.numShards):
             df4.append(pd.DataFrame(Statistics.chain[s]))
             #df4.columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions','Block Size']
-            df4[s].columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size']
+            df4[s].columns= ['Block Depth', 'Block ID', 'Previous Block', 'Block Timestamp', 'Miner ID', '# transactions', 'Block Size', 'Block Copies']
 
         df5 = pd.DataFrame(Network.latencyTable)
         df5.columns = [i for i in range(0, p.Nn)]
