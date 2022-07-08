@@ -47,3 +47,5 @@ coverage.xml
 *.pot
 
 *.xlsx
+.vscode/launch.json
+__pycache__/Config.cpython-310.pyc
