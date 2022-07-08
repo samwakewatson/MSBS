@@ -56,3 +56,8 @@ class Network:
     def tx_prop_delay():
         return random.expovariate(1/p.Tdelay)
 
+    #How long does it take to get synched with the network (after being reassigned to a different shard)
+    def download_delay(numBlocks):
+        return 0.1 * numBlocks #we assume a constant delay 
+
+

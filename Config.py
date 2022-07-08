@@ -36,7 +36,7 @@ class Config:
     Bdelay = 0.2  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
     Breward = 12.5  # Reward for mining a block
     slotTime = 4 #time each slot takes - doesn't exactly mimic harmony
-    epochLength = 128 #how many slots in an epoch - node only the beacon chain determines epoch in harmonyONE
+    epochLength = 100 #how many slots in an epoch - node only the beacon chain determines epoch in harmonyONE
     slotLeaders = [] 
 
     ''' Transaction Parameters '''
@@ -49,7 +49,7 @@ class Config:
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 150  # the total number of nodes in the network
+    Nn = 100  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 

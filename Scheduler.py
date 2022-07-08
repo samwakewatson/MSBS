@@ -47,3 +47,6 @@ class Scheduler:
             e = Event("receive_block", recipient.id, receive_block_time, block)
             Queue.add_event(e)
 
+    def clear_event_stack():
+        Queue.event_list = []
+

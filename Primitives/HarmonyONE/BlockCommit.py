@@ -7,6 +7,7 @@ from Consensus.HarmonyONE import Consensus as c
 from Consensus.FBFT import Consensus as FBFT
 from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
 from Primitives.Block import Block
+from ShardAssignment.HarmonyONE import ShardAssignment
 import random
 import numpy as np
 
@@ -72,6 +73,7 @@ class BlockCommit(BaseBlockCommit):
         
 
     #this version shuffles all of the committees, which would have a massive overhead
+    #also this is what handles the entire new epoch event, so we probably need to alter it
     def shuffle_committees(event):
         #this assigns committees randomly based on the number of votes they have, not really how Harmony works
         '''allVotes = []
@@ -86,17 +88,28 @@ class BlockCommit(BaseBlockCommit):
         for node in p.NODES:
             for s in range(0, p.numShards):
                 node.committees.append(committees[s].count(node.id))'''
-        committeeOptions = []
+        '''committeeOptions = []
         for i in range(0,p.numShards):
             x = np.zeros(p.numShards)
             x[i] = 1
             committeeOptions.append(x)
 
         for node in p.NODES:
-            node.committees = random.choice(committeeOptions)
+            node.committees = random.choice(committeeOptions)'''
+
+        Scheduler.clear_event_stack()
+
+        #we want to make sure there's a delay before the next block (for each chain)
+        #how tf do we do that
+
+        ShardAssignment.shuffle_committees()
 
         c.assign_leaders()
 
+        print(p.slotLeaders)
+
+        for s in range(0, p.numShards):
+            Scheduler.create_block_event(p.slotLeaders[s][int(event.time/p.slotTime) % len(p.slotLeaders[s])], s, event.time + ShardAssignment.sync_delay())
 
     # Block Receiving Event - we want to modify this, or where it's called so that we don't instantly update the chain.
     #We have to take into account the time it takes to download and verify each block
@@ -182,5 +195,5 @@ class BlockCommit(BaseBlockCommit):
             Scheduler.receive_block_event(recipient, block, delay)
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
-            Scheduler.new_epoch_event(block.timestamp)
+            Scheduler.new_epoch_event(block.timestamp + 0.001)
         Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 0.001)
