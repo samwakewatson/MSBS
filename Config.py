@@ -7,7 +7,7 @@ class Config:
 
     '''Specify the six key components of a sharded blockchain protocol'''
 
-    #0 = PBFT
+    #0 = delay, 1=FBFT
     shardConsensus = 0
 
     #0 = PoS, 1 = PoW

@@ -23,7 +23,7 @@ class Transaction(object):
     """
 
     def __init__(self,
-	 id=0,shardFrom=0,shardTo=0,
+	 id=0,shardFrom=0,shardTo=0,isReceipt=False,
 	 timestamp=0 or [],
 	 sender=0,
          to=0,
@@ -37,6 +37,7 @@ class Transaction(object):
         self.id = id
         self.shardFrom = shardFrom
         self.shardTo = shardTo
+        self.isReceipt = isReceipt
         self.timestamp = timestamp
         self.sender = sender
         self.to= to
@@ -70,6 +71,7 @@ class LightTransaction():
             tx.id= random.randrange(100000000000)
             tx.shardFrom = random.randint(0,p.numShards-1)
             tx.shardTo = random.randint(0,p.numShards-1)
+            tx.isReceipt = False
             tx.sender = random.choice (p.NODES).id
             tx.to= random.choice (p.NODES).id
             tx.gasLimit=gasLimit[i]
@@ -154,6 +156,18 @@ class FullTransaction():
 
         while count < len(pool):
                 if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom == shard):
+                    blocklimit -= pool[count].usedGas
+                    transactions += [pool[count]]
+                    limit += pool[count].usedGas
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo != shard and pool[count].shardFrom == shard):
+                    #we need to include the transaction, then make another one to go to the other shard
+                    blocklimit -= pool[count].usedGas
+                    transactions += [pool[count]]
+                    limit += pool[count].usedGas
+                    receiptTx = pool[count]
+                    receiptTx.isReceipt = True
+                    FullTransaction.transaction_prop(receiptTx)
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
