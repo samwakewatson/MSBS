@@ -133,6 +133,7 @@ class FullTransaction():
             FullTransaction.transaction_prop(tx)
 
     # Transaction propogation & preparing pending lists for miners
+    #Do we want to ignore transactions not relevant to a particular node?
     def transaction_prop(tx):
         # Fill each pending list. This is for transaction propogation
         for i in p.NODES:

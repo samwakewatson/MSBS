@@ -195,5 +195,5 @@ class BlockCommit(BaseBlockCommit):
             Scheduler.receive_block_event(recipient, block, delay)
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
-            Scheduler.new_epoch_event(block.timestamp + 0.001)
-        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 0.001)
+            Scheduler.new_epoch_event(block.timestamp + delay + 0.001)
+        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)
