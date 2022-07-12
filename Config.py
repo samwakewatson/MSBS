@@ -49,7 +49,7 @@ class Config:
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 5  # the total number of nodes in the network
+    Nn = 150  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
@@ -57,11 +57,11 @@ class Config:
         NODES.append(Node(id=i, stake=random.randint(1,100)))
 
     '''Shard Parameters'''
-    numShards = 1
+    numShards = 4
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each 
 
     ''' Simulation Parameters '''
-    simTime = 500  # the simulation length (in seconds)
+    simTime = 10000  # the simulation length (in seconds)
     Runs = 1  # Number of simulation runs
 
 
