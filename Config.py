@@ -41,7 +41,7 @@ class Config:
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
-    Ttechnique = "Full"  # Full/Light to specify the way of modelling transactions
+    Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
     Tn = 100  # The rate of the number of transactions to be created per second
     # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
@@ -49,7 +49,7 @@ class Config:
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 100  # the total number of nodes in the network
+    Nn = 5  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
@@ -57,7 +57,7 @@ class Config:
         NODES.append(Node(id=i, stake=random.randint(1,100)))
 
     '''Shard Parameters'''
-    numShards = 4
+    numShards = 1
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each 
 
     ''' Simulation Parameters '''

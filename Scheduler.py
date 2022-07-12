@@ -50,3 +50,8 @@ class Scheduler:
     def clear_event_stack():
         Queue.event_list = []
 
+    def cancel_new_blocks():
+        for event in Queue.event_list:
+            if event.type == "create_block":
+                del event
+

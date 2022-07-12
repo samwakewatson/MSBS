@@ -99,6 +99,8 @@ class BlockCommit(BaseBlockCommit):
 
         #Scheduler.clear_event_stack()
 
+        Scheduler.cancel_new_blocks()
+
         #we want to make sure there's a delay before the next block (for each chain)
         #how tf do we do that
 
