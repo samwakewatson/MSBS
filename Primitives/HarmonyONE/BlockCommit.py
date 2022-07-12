@@ -97,7 +97,7 @@ class BlockCommit(BaseBlockCommit):
         for node in p.NODES:
             node.committees = random.choice(committeeOptions)'''
 
-        Scheduler.clear_event_stack()
+        #Scheduler.clear_event_stack()
 
         #we want to make sure there's a delay before the next block (for each chain)
         #how tf do we do that
