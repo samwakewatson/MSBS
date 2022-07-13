@@ -1,3 +1,4 @@
+import queue
 from Config import Config as p
 import random
 from Primitives.Block import Block
@@ -53,5 +54,5 @@ class Scheduler:
     def cancel_new_blocks():
         for event in Queue.event_list:
             if event.type == "create_block":
-                del event
+                Queue.event_list.remove(event)
 
