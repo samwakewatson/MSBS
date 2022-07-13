@@ -20,7 +20,7 @@ class Scheduler:
             # prepare attributes for the event
             block = Block()
             block.miner = miner.id
-            block.depth = len(miner.blockchain[shard])
+            block.depth = miner.blockchain[shard][-1].depth + 1
             block.id = random.randrange(100000000000)
             block.previous = miner.last_block(shard).id
             block.timestamp = eventTime

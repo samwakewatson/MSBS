@@ -10,6 +10,7 @@ class Node(BaseNode):
         super().__init__(id)#,blockchain,transactionsPool,blocks,balance)
         self.stake = stake
         self.blockchain= []# create an array for each miner to store chain state locally
+        self.epoch = 0
         self.transactionsPool= []
         self.blocks= []# total number of blocks mined in the main chain
         self.balance= 0# to count all reward that a miner made, including block rewards + uncle rewards + transactions fees

@@ -11,4 +11,14 @@ What do we want this module to do?
     
     Otherwise how on earth are we going to get it to work?
     
-    We can't use an up to date flag in all systems'''
+    We can't use an up to date flag in all systems
+    
+    I guess we just replace the blockchain with a custom blockchain containing only checkpoint blocks'''
+
+class StateCompaction:
+
+    #we want this to return a chain of checkpoints i.e. epoch start blocks
+    #then the most recent block is classed as something
+    #this is going to break a lot of stuff
+    def checkpointChain(shard):
+        return 1

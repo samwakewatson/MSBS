@@ -32,6 +32,10 @@ class Node(object):
     def blockchain_length(self, shard):
         return len(self.blockchain[shard])-1
 
+    #be careful using this one and the one above
+    def blockchain_height(self, shard):
+        return self.blockchain[shard][-1].depth
+
     # reset the state of blockchains for all nodes in the network (before starting the next run) 
     def resetState():
         from Config import Config as p

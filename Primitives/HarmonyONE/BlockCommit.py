@@ -99,6 +99,9 @@ class BlockCommit(BaseBlockCommit):
 
         #Scheduler.clear_event_stack()
 
+        for node in p.NODES:
+            node.epoch += 1
+
         Scheduler.cancel_new_blocks()
 
         #we want to make sure there's a delay before the next block (for each chain)

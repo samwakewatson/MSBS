@@ -31,7 +31,7 @@ class Statistics:
     def blocks_results():
         trans = 0
 
-        Statistics.mainBlocks= sum([len(i) - 1 for i in c.global_chain])
+        Statistics.mainBlocks= sum([len(i) - 1 for i in c.global_chain]) #needs fixing
         Statistics.staleBlocks = Statistics.totalBlocks - Statistics.mainBlocks
         for s in range(0,p.numShards):
             for b in c.global_chain[s]:
