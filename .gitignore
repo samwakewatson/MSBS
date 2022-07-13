@@ -49,3 +49,4 @@ coverage.xml
 *.xlsx
 .vscode/launch.json
 __pycache__/Config.cpython-310.pyc
+*.pyc
