@@ -119,13 +119,22 @@ class Consensus(BaseConsensus):
         #we need to find the longest chain for each node
         #so if we have a proper model of the consensus structure, we can 
         #need to be careful about a new epoch occurring right at the end
+
+        #we now need to find valid bits between checkpoints
+        #maybe we want to build up from genesis?
+        #all nodes in the same committee should have the same epochs
+        
+        #iterate through the nodes until we have a target depth?
+        '''for node in p.NODES:
+            for s in range(0, p.numShards):'''
+
+
+
         longestChains = [0] * p.numShards #store node IDs that have the longest chain of each shard - note that we might have a difference of like 1 block
         for i in range(0,p.Nn):
             for s in range(0,p.numShards):
                 if len(p.NODES[i].blockchain[s]) > len(p.NODES[longestChains[s]].blockchain[s]):
                     longestChains[s] = i
-        for s in range(0,p.numShards):
             BaseConsensus.global_chain.append(p.NODES[longestChains[s]].blockchain[s])
-
 
 

@@ -26,7 +26,7 @@ class Node(object):
 
     # Get the last block at the node's local blockchain
     def last_block(self, shard):
-        return self.blockchain[shard][len(self.blockchain[shard])-1]
+        return self.blockchain[shard][-1]
 
     # Get the length of the blockchain (number of blocks)
     def blockchain_length(self, shard):
