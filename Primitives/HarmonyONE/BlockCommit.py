@@ -8,6 +8,7 @@ from Consensus.FBFT import Consensus as FBFT
 from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
 from Primitives.Block import Block
 from ShardAssignment.HarmonyONE import ShardAssignment
+from StateCompaction.Checkpoints import StateCompaction
 import random
 import numpy as np
 
@@ -111,7 +112,9 @@ class BlockCommit(BaseBlockCommit):
 
         c.assign_leaders()
 
-        print(p.slotLeaders)
+        c.fork_resolution()
+        for s in range(0,p.numShards):
+            StateCompaction.checkpointChain(s)
 
         for s in range(0, p.numShards):
             Scheduler.create_block_event(p.slotLeaders[s][int(event.time/p.slotTime) % len(p.slotLeaders[s])], s, event.time + ShardAssignment.sync_delay())
@@ -201,4 +204,4 @@ class BlockCommit(BaseBlockCommit):
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
             Scheduler.new_epoch_event(block.timestamp + delay + 0.001)
-        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)
+        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 2)#we need to change the 2 to the network delay

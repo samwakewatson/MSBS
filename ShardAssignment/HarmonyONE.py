@@ -26,7 +26,7 @@ class ShardAssignment:
             committee = [node.id for node in p.NODES if node.committees[s] != 0]
             numReassign = int(p.cuckooRuleConstant * len(committee))
             random.shuffle(committee)
-            for nodeID in committee:
+            for nodeID in committee[0:numReassign]:
                 p.NODES[nodeID].committees = random.choice(committeeOptions) #note this can send members back to their own shard, do we want this?
 
     #time taken for enough (all) nodes in each committee to be synched with the overall committee

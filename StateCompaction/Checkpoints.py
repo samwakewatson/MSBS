@@ -1,3 +1,6 @@
+from re import S
+from Config import Config as p
+from Consensus.HarmonyONE import Consensus as c
 '''We want to model the node only downloading the blocks it needs
 So in the case of checkpointing (in harmonyONE for example) we only need
 the checkpoint blocks and however many blocks currently exist
@@ -20,5 +23,13 @@ class StateCompaction:
     #we want this to return a chain of checkpoints i.e. epoch start blocks
     #then the most recent block is classed as something
     #this is going to break a lot of stuff
+
+
+    #this isnt accurate, as the shards arent synched so we dont know exactly when the checkpoint blocks will be
     def checkpointChain(shard):
-        return 1
+        #c.fork_resolution()
+        checkpoints = c.global_chain[shard][0::p.epochLength]
+        for node in p.NODES:
+            lastBlock = node.blockchain_height(shard)
+            if lastBlock != c.global_chain[shard][-1].depth:
+                node.blockchain[shard]+=checkpoints[node.epoch:]

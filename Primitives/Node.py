@@ -30,11 +30,21 @@ class Node(object):
 
     # Get the length of the blockchain (number of blocks)
     def blockchain_length(self, shard):
-        return len(self.blockchain[shard])-1
+        return len(self.blockchain[shard])
 
     #be careful using this one and the one above
     def blockchain_height(self, shard):
         return self.blockchain[shard][-1].depth
+
+    def return_block(self, shard, height):
+        len = self.blockchain_length(shard)
+        
+        i = 0
+        while i < len:
+            if self.blockchain[shard][i].depth == height:
+                return self.blockchain[shard][i]
+            i += 1
+        return 0
 
     # reset the state of blockchains for all nodes in the network (before starting the next run) 
     def resetState():

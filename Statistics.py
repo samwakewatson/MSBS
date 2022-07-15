@@ -75,7 +75,7 @@ class Statistics:
             for i in c.global_chain[s]:
                     blockCopies = 0
                     for j in range(0,p.Nn):
-                        if len(p.NODES[j].blockchain[s]) > i.depth:
+                        if p.NODES[j].return_block(s,i.depth) != 0:
                             blockCopies += 1
                     block= [i.depth, i.id, i.previous, i.timestamp, i.miner, len(i.transactions), i.size, blockCopies]
                     Statistics.chain[s] +=[block]
