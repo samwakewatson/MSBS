@@ -117,6 +117,7 @@ class Consensus(BaseConsensus):
     #s    BaseConsensus.global_chain=p.NODES[0].blockchain
 
     def fork_resolution():
+        BaseConsensus.global_chain = []
         #we need to find the longest chain for each node
         #so if we have a proper model of the consensus structure, we can 
         #need to be careful about a new epoch occurring right at the end
