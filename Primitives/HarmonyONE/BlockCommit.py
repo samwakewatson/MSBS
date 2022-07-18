@@ -141,9 +141,9 @@ class BlockCommit(BaseBlockCommit):
                 #BlockCommit.generate_next_block(node,currentTime)# Start mining or working on the next block
 
             #### case 2: the received block is  not built on top of the last block ####
-            elif len(miner.blockchain[blockShard]) > len(node.blockchain[blockShard]): #this line is maybe redundant?? probably caught by the line below
+            elif miner.blockchain_height(blockShard) > node.blockchain_height(blockShard): #this line is maybe redundant?? probably caught by the line below
                 depth = event.block.depth + 1
-                if (depth > len(node.blockchain[blockShard])):
+                if (depth > node.blockchain_height(blockShard)):
                     BlockCommit.update_local_blockchain(node,miner,blockShard,depth)
                     #BlockCommit.generate_next_block(node,currentTime)# Start mining or working on the next block
 
@@ -203,5 +203,5 @@ class BlockCommit(BaseBlockCommit):
             Scheduler.receive_block_event(recipient, block, delay)
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
-            Scheduler.new_epoch_event(block.timestamp + delay + 0.001)
-        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay + 2)#we need to change the 2 to the network delay
+            Scheduler.new_epoch_event(block.timestamp + 0.001)
+        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)#we need to add the network delay

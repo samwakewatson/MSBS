@@ -24,7 +24,15 @@ elif p.model == 4:
     from Models.HarmonyONE.Node import Node
     from Models.Incentives import Incentives'''
 
-from Consensus.HarmonyONE import Consensus
+#note that we have 2 consensus files required for a lot of stuff
+match p.shardConsensus:
+    case 0:
+        from Consensus.Delay import Consensus
+    case 1:
+        from Consensus.FBFT import Consensus
+    case 2: 
+        from Consensus.HarmonyONE import Consensus
+
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 from Primitives.HarmonyONE.Node import Node
 from Primitives.HarmonyONE.BlockCommit import BlockCommit

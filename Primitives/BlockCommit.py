@@ -37,25 +37,41 @@ class BlockCommit:
     def update_local_blockchain(node,miner,shard,depth):
         # the node here is the one that needs to update its blockchain, while miner here is the one who owns the last block generated
         # the node will update its blockchain to match the miner's blockchain
-        '''i=0
+
+        #only update from the latest checkpoint onwards
+        '''i= miner.epoch * p.epochLength
         while (i < depth):
-            if (i < node.blockchain[shard][-1].depth):
-                if (node.blockchain[shard][i].id != miner.blockchain[shard][i].id): # and (self.node.blockchain[i-1].id == Miner.blockchain[i].previous) and (i>=1):
+            if (i < node.blockchain[shard][-1].depth and miner.return_block(shard, i) != 0):
+                if (node.return_block(shard, i) == 0):
+
+                if (node.return_block(shard, i).id != miner.return_block(shard, i).id): # and (self.node.blockchain[i-1].id == Miner.blockchain[i].previous) and (i>=1):
                     #node.unclechain.append(node.blockchain[i]) # move block to unclechain
-                    newBlock = miner.blockchain[shard][i]
-                    node.blockchain[shard][i]= newBlock
+                    newBlock = miner.return_block(shard, i).id
+                    node.change_block(shard, i, newBlock)
                     if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
             else:
-                newBlock = miner.blockchain[shard][i]
+                newBlock = miner.return_block(shard, i).id
                 node.blockchain[shard].append(newBlock)
                 if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
             i+=1'''
         
+        i= miner.epoch * p.epochLength
+        while (i < depth):
+            if (i < node.blockchain[shard][-1].depth and miner.return_block(shard, i) != 0):
+                newBlock = miner.return_block(shard, i)
+                node.change_block(shard, i, newBlock)
+                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
+            '''else:
+                newBlock = miner.return_block(shard, i)
+                node.blockchain[shard].append(newBlock)
+                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)'''
+            i+=1
 
-        #we need to change this because not all nodes will have a complete blockchain anymore
-        #we also sort of need to know what the last checkpoint was
-        #can we do it in a way that doesn't mess everything up?
-        node.blockchain[shard].append(miner.blockchain[shard][-1])
+
+        #this doesn't work and leads to progressively smaller committees, it forces nodes out of the network if we have receive events in the wrong order
+        #but should we ever have events in the wrong order?
+        '''if node.blockchain[shard][-1].id == miner.blockchain[shard][-2].id:
+            node.blockchain[shard].append(miner.blockchain[shard][-1])'''
 
     #sync all shards?
     #we want them to download just the checkpoint blocks

@@ -32,7 +32,7 @@ class Node(object):
     def blockchain_length(self, shard):
         return len(self.blockchain[shard])
 
-    #be careful using this one and the one above
+    #get the height of the blockchain (height of most recent block)
     def blockchain_height(self, shard):
         return self.blockchain[shard][-1].depth
 
@@ -45,6 +45,23 @@ class Node(object):
                 return self.blockchain[shard][i]
             i += 1
         return 0
+
+    #slots a block into the correct place
+    #note that we don't check here whether it is a valid block
+    def change_block(self, shard, height, newBlock):
+        len = self.blockchain_length(shard)
+        
+        #should be redundant if we're using this right
+        if height > self.blockchain_height(shard):
+            self.append(shard, newBlock)
+            return 
+
+        i = 0
+        while i < len:
+            if self.blockchain[shard][i].depth == height:
+                self.blockchain[shard][i] = newBlock
+                return
+            i += 1
 
     # reset the state of blockchains for all nodes in the network (before starting the next run) 
     def resetState():
