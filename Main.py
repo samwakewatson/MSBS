@@ -31,7 +31,12 @@ match p.shardConsensus:
     case 1:
         from Consensus.FBFT import Consensus
     case 2: 
-        from Consensus.HarmonyONE import Consensus
+        #from Consensus.HarmonyONE import Consensus
+        from Consensus.Consensus import Consensus
+
+match p.stateCompaction:
+    case 0:
+        from StateCompaction.Checkpoints import StateCompaction
 
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 from Primitives.HarmonyONE.Node import Node

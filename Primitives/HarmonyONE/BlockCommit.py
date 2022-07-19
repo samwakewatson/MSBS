@@ -3,7 +3,8 @@ from Config import Config as p
 from Primitives.HarmonyONE.Node import Node
 from Statistics import Statistics
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
-from Consensus.HarmonyONE import Consensus as c
+#from Consensus.HarmonyONE import Consensus as c
+from Consensus.Consensus import Consensus as c
 from Consensus.FBFT import Consensus as FBFT
 from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
 from Primitives.Block import Block
@@ -142,7 +143,7 @@ class BlockCommit(BaseBlockCommit):
 
             #### case 2: the received block is  not built on top of the last block ####
             elif miner.blockchain_height(blockShard) > node.blockchain_height(blockShard): #this line is maybe redundant?? probably caught by the line below
-                depth = event.block.depth + 1
+                depth = event.block.depth #+ 1
                 if (depth > node.blockchain_height(blockShard)):
                     BlockCommit.update_local_blockchain(node,miner,blockShard,depth)
                     #BlockCommit.generate_next_block(node,currentTime)# Start mining or working on the next block
