@@ -1,4 +1,3 @@
-from numpy import block
 from Config import Config as p
 
 #Currently BlockCommit kinda does way too much

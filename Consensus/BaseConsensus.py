@@ -6,7 +6,6 @@ import random
 
 #Realisitically all of this needs tearing apart
 class Consensus:
-    #Note this obviously won't work
     global_chain=[] # the accepted global chain after resovling the forks
 
 
