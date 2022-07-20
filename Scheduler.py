@@ -20,7 +20,7 @@ class Scheduler:
             # prepare attributes for the event
             block = Block()
             block.miner = miner.id
-            block.depth = miner.blockchain[shard][-1].depth + 1
+            block.depth = miner.blockchain_height(shard) + 1
             block.id = random.randrange(100000000000)
             block.previous = miner.last_block(shard).id
             block.timestamp = eventTime
@@ -55,4 +55,5 @@ class Scheduler:
         for event in Queue.event_list:
             if event.type == "create_block":
                 Queue.event_list.remove(event)
+                print(event.type)
 

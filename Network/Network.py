@@ -27,8 +27,9 @@ class Network:
     latencyTable = numpy.zeros((p.Nn, p.Nn))
     for i in range (0, p.Nn):
         for j in range(i, p.Nn):
-            latencyTable[i][j] = random.expovariate(1/p.Bdelay)
+            #latencyTable[i][j] = random.expovariate(1/p.Bdelay)
             #latencyTable[i][j] = random.uniform(0,p.Bdelay)
+            latencyTable[i][j] = 0.1
 
     #for i in range(0,p.Nn):
     #    latencyTable[0][i] = 100

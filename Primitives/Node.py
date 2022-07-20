@@ -53,7 +53,7 @@ class Node(object):
         
         #should be redundant if we're using this right
         if height > self.blockchain_height(shard):
-            self.append(shard, newBlock)
+            self.blockchain[shard].append(newBlock)
             return 
 
         i = 0
@@ -61,6 +61,8 @@ class Node(object):
             if self.blockchain[shard][i].depth == height:
                 self.blockchain[shard][i] = newBlock
                 return
+            elif self.blockchain[shard][i].depth < height and self.blockchain[shard][i+1].depth > height:
+                self.blockchain[shard].insert(i+1,newBlock)
             i += 1
 
     # reset the state of blockchains for all nodes in the network (before starting the next run) 

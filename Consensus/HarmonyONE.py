@@ -47,14 +47,14 @@ class Consensus(BaseConsensus):
             #print(node.effectiveStake)
 
     #SUS AF - doesn't actually do anything even vaguely similar to what we want to do
-    def assign_leaders():
+    '''def assign_leaders():
         p.slotLeaders = []
         for s in range(0,p.numShards):
             x = []
             for node in p.NODES:
                 if node.committees[s] != 0:
                     x.append(node)
-            p.slotLeaders.append(x)
+            p.slotLeaders.append(x)'''
             
     #this probably shouldn't be here
     def calculate_votes(miner):
@@ -145,7 +145,7 @@ class Consensus(BaseConsensus):
             '''i = 0
             while i < longestChains[s]:'''
 
-
+            #this can inject invalid blocks
             for i in range(0, longestChains[s]):
                 for node in p.NODES:
                     if node.return_block(s, i) != 0:

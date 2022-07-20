@@ -54,17 +54,20 @@ class BlockCommit:
                 if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
             i+=1'''
         
-        i= miner.epoch * p.epochLength
+        '''i= miner.epoch * p.epochLength
         while (i < depth):
             if (i < node.blockchain[shard][-1].depth and miner.return_block(shard, i) != 0):
                 newBlock = miner.return_block(shard, i)
                 node.change_block(shard, i, newBlock)
                 if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
-            '''else:
+            else:
                 newBlock = miner.return_block(shard, i)
                 node.blockchain[shard].append(newBlock)
-                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)'''
-            i+=1
+                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
+            i+=1'''
+        #need to change this
+        newBlock = miner.last_block(shard)
+        node.change_block(shard, newBlock.depth, newBlock)
 
 
         #this doesn't work and leads to progressively smaller committees, it forces nodes out of the network if we have receive events in the wrong order

@@ -28,7 +28,7 @@ class Queue:
         del Queue.event_list[0]
     def get_next_event():
         Queue.event_list.sort(key=operator.attrgetter('time'), reverse=False) # sort events -> earliest one first
-        print(Queue.event_list[0].type, Queue.event_list[0].time)
+        #print(Queue.event_list[0].type, Queue.event_list[0].time)
         return Queue.event_list[0]
     def size():
         return len(Queue.event_list)

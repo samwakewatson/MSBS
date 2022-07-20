@@ -26,7 +26,7 @@ class BlockCommit(BaseBlockCommit):
         elif event.type == "new_epoch": #need to add the code for this
             BlockCommit.shuffle_committees(event)
 
-    # Block Creation Event - need to add shard logic
+    # Block Creation Event
     def generate_block (event):
 
         '''block = Block()
@@ -54,7 +54,8 @@ class BlockCommit(BaseBlockCommit):
                 event.block.transactions = blockTrans
                 event.block.usedgas= blockSize
 
-            miner.blockchain[blockShard].append(event.block)
+            #miner.blockchain[blockShard].append(event.block)
+            miner.change_block(blockShard, event.block.depth, event.block)
 
             if p.hasTrans and p.Ttechnique == "Light":LT.create_transactions() # generate transactions
 
@@ -107,18 +108,17 @@ class BlockCommit(BaseBlockCommit):
         Scheduler.cancel_new_blocks()
 
         #we want to make sure there's a delay before the next block (for each chain)
-        #how tf do we do that
 
         ShardAssignment.shuffle_committees()
 
-        c.assign_leaders()
+        ShardAssignment.assign_leaders()
 
         c.fork_resolution()
         for s in range(0,p.numShards):
             StateCompaction.checkpointChain(s)
 
         for s in range(0, p.numShards):
-            Scheduler.create_block_event(p.slotLeaders[s][int(event.time/p.slotTime) % len(p.slotLeaders[s])], s, event.time + ShardAssignment.sync_delay())
+            Scheduler.create_block_event(p.slotLeaders[s][0], s, event.time + ShardAssignment.sync_delay())
 
     # Block Receiving Event - we want to modify this, or where it's called so that we don't instantly update the chain.
     #We have to take into account the time it takes to download and verify each block
@@ -166,7 +166,7 @@ class BlockCommit(BaseBlockCommit):
             currentTime = currentTime + p.slotTime
             Scheduler.new_slot_event(currentTime)'''
 
-        Scheduler.new_slot_event(0.01)
+        Scheduler.new_slot_event(2)
         #assign all of the nodes votes in the various committees
         #this needs to be completely changed -effective stake changes the game
         '''for node in p.NODES:
@@ -190,19 +190,33 @@ class BlockCommit(BaseBlockCommit):
             node.committees = random.choice(committeeOptions)
         #for node in p.NODES:
             #print(node.committees)
-        c.assign_leaders()
+        ShardAssignment.assign_leaders()
         #for node in p.NODES:
         #    BlockCommit.generate_next_block(node,currentTime)
                 
-    def propagate_block (block):
+    def propagate_block(block):
         '''for recipient in p.NODES:
             if recipient.id != block.miner:
                 blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) # draw block propagation delay from a distribution !! or you can assign 0 to ignore block propagation delay
                 Scheduler.receive_block_event(recipient,block,blockDelay)'''
-        delay = FBFT.timeToReachConsensus(block.miner, [node.id for node in p.NODES if node.committees[block.shard] != 0])
+        #delay = FBFT.timeToReachConsensus(block.miner, [node.id for node in p.NODES if node.committees[block.shard] != 0])#
+        
+        if block.shard == 0:
+            print(block.timestamp)
+            print(block.depth)
+            print(block.shard)
+            print(block.miner)
+            print("\n")
+        
+        delay = 2
         for recipient in p.NODES:
-            Scheduler.receive_block_event(recipient, block, delay)
+            if recipient.id != block.miner:
+                Scheduler.receive_block_event(recipient, block, 0)
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
             Scheduler.new_epoch_event(block.timestamp + 0.001)
-        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)#we need to add the network delay
+            #print(block.depth)
+            #print(block.shard)
+            #print(block.miner)
+            return
+        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth + 1) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)#we need to add the network delay

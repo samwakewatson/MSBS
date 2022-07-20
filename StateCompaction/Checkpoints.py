@@ -31,5 +31,8 @@ class StateCompaction:
         checkpoints = c.global_chain[shard][0::p.epochLength]
         for node in p.NODES:
             lastBlock = node.blockchain_height(shard)
+            '''if lastBlock != c.global_chain[shard][-1].depth:
+                node.blockchain[shard] = node.blockchain[shard] + checkpoints[int(node.blockchain_height(shard)/p.epochLength):] 
+            lastBlock = node.blockchain_height(shard)'''
             if lastBlock != c.global_chain[shard][-1].depth:
-                node.blockchain[shard] = node.blockchain[shard] + checkpoints[int(node.blockchain_height(shard)/p.epochLength)+2:]
+                node.change_block(shard, c.global_chain[shard][-1].depth, c.global_chain[shard][-1])
