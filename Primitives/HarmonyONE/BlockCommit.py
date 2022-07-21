@@ -208,7 +208,7 @@ class BlockCommit(BaseBlockCommit):
             print(block.miner)
             print("\n")
         
-        delay = 2
+        delay = c.timeToReachConsensus()
         for recipient in p.NODES:
             if recipient.id != block.miner:
                 Scheduler.receive_block_event(recipient, block, 0)

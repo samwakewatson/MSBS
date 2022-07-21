@@ -58,11 +58,11 @@ class Config:
 
     '''Shard Parameters'''
     numShards = 4
-    cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each 
+    cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each epoch
 
     ''' Simulation Parameters '''
     simTime = 1500  # the simulation length (in seconds)
-    Runs = 1  # Number of simulation runs
+    Runs = 2  # Number of simulation runs
 
 
 
