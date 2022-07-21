@@ -4,8 +4,8 @@ from Primitives.HarmonyONE.Node import Node
 from Statistics import Statistics
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 #from Consensus.HarmonyONE import Consensus as c
-from Consensus.Consensus import Consensus as c
-from Consensus.FBFT import Consensus as FBFT
+#from Consensus.Consensus import Consensus as c
+from Consensus.FBFT import Consensus as c
 from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
 from Primitives.Block import Block
 from ShardAssignment.HarmonyONE import ShardAssignment

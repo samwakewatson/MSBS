@@ -1,4 +1,5 @@
 from Consensus.BaseConsensus import Consensus as BaseConsensus
+from Config import Config as p
 from Network.Network import Network
 import math
 
@@ -39,3 +40,41 @@ class Consensus(BaseConsensus):
         return roundDelay * 5 + 1 #the second value is some constant representing the time taken due to processing
 
     
+    def fork_resolution():
+        BaseConsensus.global_chain = []
+        #we need to find the longest chain for each node
+        #so if we have a proper model of the consensus structure, we can 
+        #need to be careful about a new epoch occurring right at the end
+
+        #we now need to find valid bits between checkpoints
+        #maybe we want to build up from genesis?
+        #all nodes in the same committee should have the same epochs
+        
+        #iterate through the nodes until we have a target depth?
+        '''for node in p.NODES:
+            for s in range(0, p.numShards):'''
+        
+        #BELOW IS SOME AWFUL AWFUL CODE, we only need run it once though
+
+
+        longestChains = [0] * p.numShards #store node IDs that have the longest chain of each shard - note that we might have a difference of like 1 block
+        for i in range(0,p.Nn):
+            for s in range(0,p.numShards):
+                if p.NODES[i].blockchain_height(s) > longestChains[s]:
+                    #longestChains[s] = i
+                    longestChains[s] = p.NODES[i].blockchain_height(s)
+        for s in range(0, p.numShards):
+            BaseConsensus.global_chain.append([])
+
+            '''i = 0
+            while i < longestChains[s]:'''
+
+            #this can inject invalid blocks
+            for i in range(0, longestChains[s]):
+                for node in p.NODES:
+                    if node.return_block(s, i) != 0:
+                        BaseConsensus.global_chain[s].append(node.return_block(s, i))
+                        break
+            #BaseConsensus.global_chain.append(p.NODES[longestChains[s]].blockchain[s])
+
+
