@@ -1,6 +1,5 @@
 from Scheduler import Scheduler
 from Config import Config as p
-from Primitives.HarmonyONE.Node import Node
 from Statistics import Statistics
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 from Consensus.HarmonyONE import Consensus as c
@@ -10,8 +9,9 @@ from Primitives.BlockCommit import BlockCommit as BaseBlockCommit
 from Primitives.Block import Block
 from ShardAssignment.HarmonyONE import ShardAssignment
 from StateCompaction.Checkpoints import StateCompaction
+from Network.Network import Network 
 import random
-import numpy as np
+
 
 class BlockCommit(BaseBlockCommit):
 
@@ -181,28 +181,7 @@ class BlockCommit(BaseBlockCommit):
 
                 
     def propagate_block(block):
-        '''for recipient in p.NODES:
-            if recipient.id != block.miner:
-                blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) # draw block propagation delay from a distribution !! or you can assign 0 to ignore block propagation delay
-                Scheduler.receive_block_event(recipient,block,blockDelay)'''
-        #delay = FBFT.timeToReachConsensus(block.miner, [node.id for node in p.NODES if node.committees[block.shard] != 0])#
-        
-        if block.shard == 0:
-            print(block.timestamp)
-            print(block.depth)
-            print(block.shard)
-            print(block.miner)
-            print("\n")
-        
-        delay = c.timeToReachConsensus()
         for recipient in p.NODES:
             if recipient.id != block.miner:
-                Scheduler.receive_block_event(recipient, block, 0)
-        #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
-        if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
-            Scheduler.new_epoch_event(block.timestamp + 0.001)
-            #print(block.depth)
-            #print(block.shard)
-            #print(block.miner)
-            return
-        Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth + 1) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)#we need to add the network delay
+                blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) # draw block propagation delay from a distribution !! or you can assign 0 to ignore block propagation delay
+                Scheduler.receive_block_event(recipient,block,blockDelay)

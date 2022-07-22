@@ -1,5 +1,9 @@
 from Config import Config as p
-from Consensus.HarmonyONE import Consensus as c
+match p.shardConsensus:
+    case 1:
+        from Consensus.HarmonyONE import Consensus as c
+    case 3:
+        from Consensus.SlotBased import Consensus as c
 '''We want to model the node only downloading the blocks it needs
 So in the case of checkpointing (in harmonyONE for example) we only need
 the checkpoint blocks and however many blocks currently exist
@@ -27,7 +31,9 @@ class StateCompaction:
     #this isnt accurate, as the shards arent synched so we dont know exactly when the checkpoint blocks will be
     def checkpointChain(shard):
         #c.fork_resolution()
+        c.fork_resolution()
         checkpoints = c.global_chain[shard][0::p.epochLength]
+        print(checkpoints)
         for node in p.NODES:
             lastBlock = node.blockchain_height(shard)
             '''if lastBlock != c.global_chain[shard][-1].depth:

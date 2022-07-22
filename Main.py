@@ -59,7 +59,7 @@ def main():
             elif p.Ttechnique == "Full":
                 FT.create_transactions()  # generate pending transactions
 
-        Node.generate_gensis_block()  # generate the gensis block for all miners
+        Node.generate_genesis_block()  # generate the gensis block for all miners
         # initiate initial events >= 1 to start with
         BlockCommit.generate_initial_events()
 

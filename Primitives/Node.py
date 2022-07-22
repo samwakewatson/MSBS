@@ -18,7 +18,7 @@ class Node(object):
         self.balance= 0
 
     # Generate the Genesis block for each shard and append it to the local blockchain for all nodes
-    def generate_gensis_block():
+    def generate_genesis_block():
         from Config import Config as p
         for node in p.NODES:
             for s in range(0, p.numShards):

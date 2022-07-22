@@ -127,7 +127,7 @@ class Consensus(BaseConsensus):
         #BELOW IS SOME AWFUL AWFUL CODE, we only need run it once though
 
 
-        longestChains = [0] * p.numShards #store node IDs that have the longest chain of each shard - note that we might have a difference of like 1 block
+        longestChains = [0] * p.numShards 
         for i in range(0,p.Nn):
             for s in range(0,p.numShards):
                 if p.NODES[i].blockchain_height(s) > longestChains[s]:
@@ -140,7 +140,7 @@ class Consensus(BaseConsensus):
             while i < longestChains[s]:'''
 
             #this can inject invalid blocks
-            for i in range(0, longestChains[s]):
+            for i in range(0, longestChains[s]+1):
                 for node in p.NODES:
                     if node.return_block(s, i) != 0:
                         BaseConsensus.global_chain[s].append(node.return_block(s, i))
