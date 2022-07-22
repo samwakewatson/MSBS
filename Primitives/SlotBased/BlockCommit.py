@@ -155,6 +155,23 @@ class BlockCommit(BaseBlockCommit):
                  blockTime = currentTime + c.Protocol(node) # time when miner x generate the next block
                  Scheduler.create_block_event(node,blockTime)'''
 
+    #change this back to longest chain rule (technically densest chain)
+    #though wait if we're using checkpointing then we need this to only update the most recent stuff
+    def update_local_blockchain(node, miner, shard, depth):
+        i= miner.epoch * p.epochLength
+        while (i < depth):
+            if (i < node.blockchain[shard][-1].depth and miner.return_block(shard, i) != 0):
+                if (node.return_block(shard, i).id != miner.return_block(shard, i).id): # and (self.node.blockchain[i-1].id == Miner.blockchain[i].previous) and (i>=1):
+                    #node.unclechain.append(node.blockchain[i]) # move block to unclechain
+                    newBlock = miner.return_block(shard, i).id
+                    node.change_block(shard, i, newBlock)
+                    if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
+            else:
+                newBlock = miner.return_block(shard, i).id
+                node.blockchain[shard].append(newBlock)
+                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,newBlock)
+            i+=1
+
     def generate_initial_events():
         currentTime=0
         allVotes = []
@@ -183,5 +200,5 @@ class BlockCommit(BaseBlockCommit):
     def propagate_block(block):
         for recipient in p.NODES:
             if recipient.id != block.miner:
-                blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) # draw block propagation delay from a distribution !! or you can assign 0 to ignore block propagation delay
+                blockDelay= Network.block_prop_delay(Network, block.miner, recipient.id) 
                 Scheduler.receive_block_event(recipient,block,blockDelay)

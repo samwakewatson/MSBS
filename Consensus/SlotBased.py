@@ -26,7 +26,7 @@ class Consensus(BaseConsensus):
     #determines if a validator is allowed to produce a block at a given time (i.e. when called)
     #Note this is currently redundant
     def Protocol(miner, shard):
-        voteShare = 0.3 #this doesn't really make a great deal of sense in the current system
+        voteShare = 10 
         TOTAL_STAKE = sum([miner.committees[shard] for miner in p.NODES])
         stake = miner.committees[shard]/TOTAL_STAKE #we need to divide by the total stake on the committee, not the overall total stake
         return (random.random() < voteShare * stake)
