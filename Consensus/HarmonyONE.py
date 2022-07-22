@@ -9,10 +9,6 @@ from statistics import median
 #Need massive changes here - Epoch based PoS
 class Consensus(BaseConsensus):
 
-    """
-	We modelled PoW consensus protocol by drawing the time it takes the miner to finish the PoW from an exponential distribution
-        based on the invested hash power (computing power) fraction
-    """
     ##This needs to go, does it though? - is this so different from being elected based on stake? or do we know that stake has a different distribution?
     '''def Protocol(miner):
         ##### Start solving a fresh PoW on top of last block appended #####
@@ -26,6 +22,9 @@ class Consensus(BaseConsensus):
         TOTAL_STAKE = sum([miner.hashPower for miner in p.NODES])
         stake = miner.hashPower/TOTAL_STAKE
         return (random.random() < voteShare * stake)'''
+
+    def timeToReachConsensus():
+        return 2
 
     #determines if a validator is allowed to produce a block at a given time (i.e. when called)
     #Note this is currently redundant

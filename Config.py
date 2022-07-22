@@ -7,8 +7,8 @@ class Config:
 
     '''Specify the six key components of a sharded blockchain protocol'''
 
-    #0 = delay, 1=FBFT
-    shardConsensus = 1
+    #0 = delay, 1=FBFT, 3=SlotBased (Ouroboros like) 
+    shardConsensus = 3
 
     #0 = PoS, 1 = PoW
     sybilResistance = 0
@@ -62,7 +62,7 @@ class Config:
 
     ''' Simulation Parameters '''
     simTime = 1500  # the simulation length (in seconds)
-    Runs = 2  # Number of simulation runs
+    Runs = 1  # Number of simulation runs
 
 
 

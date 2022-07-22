@@ -33,6 +33,8 @@ match p.shardConsensus:
     case 2: 
         #from Consensus.HarmonyONE import Consensus
         from Consensus.Consensus import Consensus
+    case 3:
+        from Consensus.SlotBased import Consensus
 
 match p.stateCompaction:
     case 0:
@@ -40,7 +42,12 @@ match p.stateCompaction:
 
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 from Primitives.HarmonyONE.Node import Node
-from Primitives.HarmonyONE.BlockCommit import BlockCommit
+
+match p.shardConsensus:
+    case 0:
+        from Primitives.HarmonyONE.BlockCommit import BlockCommit
+    case 3:
+        from Primitives.SlotBased.BlockCommit import BlockCommit
 
 ########################################################## Start Simulation ##############################################################
 def main():

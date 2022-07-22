@@ -1,4 +1,3 @@
-from re import S
 from Config import Config as p
 from Consensus.HarmonyONE import Consensus as c
 '''We want to model the node only downloading the blocks it needs
