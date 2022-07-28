@@ -2,6 +2,7 @@ from Config import Config as p
 from Event import Event, Queue
 from Scheduler import Scheduler
 from Statistics import Statistics
+import time
 
 '''elif p.model == 1:
     from Models.Bitcoin.BlockCommit import BlockCommit
@@ -46,11 +47,14 @@ from Primitives.HarmonyONE.Node import Node
 match p.shardConsensus:
     case 0:
         from Primitives.HarmonyONE.BlockCommit import BlockCommit
+    case 2: 
+        from Primitives.HarmonyONE.BlockCommit import BlockCommit
     case 3:
         from Primitives.SlotBased.BlockCommit import BlockCommit
 
 ########################################################## Start Simulation ##############################################################
 def main():
+    start_time = time.time()
     for i in range(p.Runs):
         clock = 0  # set clock to 0 at the start of the simulation
         if p.hasTrans:
@@ -84,6 +88,7 @@ def main():
         # print all the simulation results in an excel file
         Statistics.print_to_excel(fname)
         Statistics.reset2()  # reset profit results
+    print("Process finished --- %s seconds ---" % (time.time() - start_time))
 
 
 ######################################################## Run Main method #####################################################################

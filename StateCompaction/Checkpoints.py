@@ -2,6 +2,8 @@ from Config import Config as p
 match p.shardConsensus:
     case 1:
         from Consensus.HarmonyONE import Consensus as c
+    case 2:
+        from Consensus.HarmonyONE import Consensus as c
     case 3:
         from Consensus.SlotBased import Consensus as c
 '''We want to model the node only downloading the blocks it needs

@@ -8,7 +8,7 @@ class Config:
     '''Specify the six key components of a sharded blockchain protocol'''
 
     #0 = delay, 1=FBFT, 3=SlotBased (Ouroboros like) 
-    shardConsensus = 3
+    shardConsensus = 2
 
     #0 = PoS, 1 = PoW
     sybilResistance = 0
@@ -17,7 +17,7 @@ class Config:
     crossShardCommunication = 0
 
     #0 = fully random each epoch, 1 = Bounded Cuckoo Rule
-    committeeDispersal = 0
+    committeeDispersal = 1
 
     #0 = don't simulate
     distributedRandomness = 0
@@ -49,7 +49,7 @@ class Config:
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 900  # the total number of nodes in the network
+    Nn = 100  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
@@ -61,7 +61,7 @@ class Config:
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each epoch
 
     ''' Simulation Parameters '''
-    simTime = 10000  # the simulation length (in seconds)
+    simTime = 10000 # the simulation length (in seconds)
     Runs = 1  # Number of simulation runs
 
 

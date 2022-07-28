@@ -24,7 +24,7 @@ class Consensus(BaseConsensus):
         return (random.random() < voteShare * stake)'''
 
     def timeToReachConsensus():
-        return 2
+        return 2.02
 
     #determines if a validator is allowed to produce a block at a given time (i.e. when called)
     #Note this is currently redundant
