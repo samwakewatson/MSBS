@@ -14,7 +14,7 @@ class Node(object):
         self.id= id
         self.blockchain= []
         self.transactionsPool= []
-        self.blocks= []
+        self.blocks= 0#[]
         self.balance= 0
 
     # Generate the Genesis block for each shard and append it to the local blockchain for all nodes

@@ -4,6 +4,8 @@ from Scheduler import Scheduler
 from Statistics import Statistics
 import time
 
+from Incentives.Incentives import Incentives
+
 '''elif p.model == 1:
     from Models.Bitcoin.BlockCommit import BlockCommit
     from Models.Bitcoin.Consensus import Consensus
@@ -76,7 +78,7 @@ def main():
 
         Consensus.fork_resolution()  # apply the longest chain to resolve the forks
         # distribute the rewards between the particiapting nodes
-        #Incentives.distribute_rewards()
+        Incentives.distribute_rewards()
         # calculate the simulation results (e.g., block statstics and miners' rewards)
         Statistics.calculate()
 

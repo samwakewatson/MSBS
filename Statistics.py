@@ -1,6 +1,6 @@
 from Config import Config as p
 from Consensus.BaseConsensus import Consensus as c
-#from Models.Incentives import Incentives
+from Incentives.Incentives import Incentives
 from Network.Network import Network
 import pandas as pd
 
@@ -25,7 +25,7 @@ class Statistics:
     def calculate():
         Statistics.global_chain() # print the global chain
         Statistics.blocks_results() # calcuate and print block statistics e.g., # of accepted blocks and stale rate etc
-        #Statistics.profit_results() # calculate and distribute the revenue or reward for miners
+        Statistics.profit_results() # calculate and distribute the revenue or reward for miners
 
     ########################################################### Calculate block statistics Results ###########################################################################################
     def blocks_results():
@@ -47,24 +47,21 @@ class Statistics:
 
         
 
-        '''for m in p.NODES:
-            i = Statistics.index + m.id * p.Runs
-            Statistics.profits[i][0]= m.id
-            if p.model== 0: Statistics.profits[i][1]= "NA"
-            else: Statistics.profits[i][1]= m.hashPower
-            Statistics.profits[i][2]= m.blocks
-            Statistics.profits[i][3]= round(m.blocks/Statistics.mainBlocks * 100,2)
-            if p.model==2:
-                Statistics.profits[i][4]= m.uncles
-                Statistics.profits[i][5]= round((m.blocks + m.uncles)/(Statistics.mainBlocks + Statistics.totalUncles) * 100,2)
-            else: Statistics.profits[i][4]=0; Statistics.profits[i][5]=0
-            Statistics.profits[i][6]= m.balance'''
-
-        #remove this once we fix the above
         for m in p.NODES:
             i = Statistics.index + m.id * p.Runs
             Statistics.profits[i][0]= m.id
-            Statistics.profits[i][1]= "NA"
+            Statistics.profits[i][1]= m.stake
+            Statistics.profits[i][2]= m.blocks
+            Statistics.profits[i][3]= round(m.blocks/Statistics.mainBlocks * 100,2)
+            Statistics.profits[i][4]=0
+            Statistics.profits[i][5]=0
+            Statistics.profits[i][6]= m.balance
+
+        #remove this once we fix the above
+        '''for m in p.NODES:
+            i = Statistics.index + m.id * p.Runs
+            Statistics.profits[i][0]= m.id
+            Statistics.profits[i][1]= "NA"'''
 
         Statistics.index+=1
 
@@ -105,7 +102,7 @@ class Statistics:
         writer = pd.ExcelWriter(fname, engine='xlsxwriter')
         df1.to_excel(writer, sheet_name='InputConfig')
         df2.to_excel(writer, sheet_name='SimOutput')
-        #df3.to_excel(writer, sheet_name='Profit')
+        df3.to_excel(writer, sheet_name='Profit')
         for s in range(0,p.numShards):
             df4[s].to_excel(writer,sheet_name='Shard '+str(s))
         df5.to_excel(writer, sheet_name='Network')
