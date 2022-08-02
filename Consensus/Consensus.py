@@ -13,7 +13,7 @@ from Config import Config as p
 if p.shardConsensus == 0:
     from Consensus.Delay import Consensus as c
 elif p.shardConsensus == 2:
-    from Consensus.Consensus import Consensus as c
+    from Consensus.HarmonyONE import Consensus as c
 
 class Consensus(c):
     i = 0
