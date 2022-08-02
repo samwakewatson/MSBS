@@ -55,7 +55,7 @@ match p.shardConsensus:
         from Primitives.SlotBased.BlockCommit import BlockCommit
 
 ########################################################## Start Simulation ##############################################################
-def main():
+def main(id):
     start_time = time.time()
     for i in range(p.Runs):
         clock = 0  # set clock to 0 at the start of the simulation
@@ -85,8 +85,9 @@ def main():
         ########## reset all global variable before the next run #############
         Statistics.reset()  # reset all variables used to calculate the results
         Node.resetState()  # reset all the states (blockchains) for all nodes in the network
-        fname = "(Allverify)1day_{0}M_{1}K.xlsx".format(
-            p.Bsize/1000000, p.Tn/1000)
+        '''fname = "Timestamp{0}_ID{1}.xlsx".format(
+            time.time(), id)'''
+        fname = "ID{0}.xlsx".format(id)
         # print all the simulation results in an excel file
         Statistics.print_to_excel(fname)
         Statistics.reset2()  # reset profit results
@@ -94,5 +95,5 @@ def main():
 
 
 ######################################################## Run Main method #####################################################################
-if __name__ == '__main__':
-    main()
+'''if __name__ == '__main__':
+    main()'''

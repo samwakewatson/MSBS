@@ -2,6 +2,7 @@ from Config import Config as p
 from Consensus.BaseConsensus import Consensus as c
 from Incentives.Incentives import Incentives
 from Network.Network import Network
+import statistics
 import pandas as pd
 
 
@@ -15,6 +16,7 @@ class Statistics:
     staleBlocks=0
     uncleRate=0
     staleRate=0
+    transactionLatency=0
     blockData=[]
     blocksResults=[]
     profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
@@ -30,16 +32,24 @@ class Statistics:
     ########################################################### Calculate block statistics Results ###########################################################################################
     def blocks_results():
         trans = 0
+        transactionDelays = []
 
-        Statistics.mainBlocks= sum([len(i) - 1 for i in c.global_chain]) #needs fixing
+        Statistics.mainBlocks= sum([len(i) for i in c.global_chain])
         Statistics.staleBlocks = Statistics.totalBlocks - Statistics.mainBlocks
         for s in range(0,p.numShards):
             for b in c.global_chain[s]:
                 Statistics.uncleBlocks = 0
                 trans += len(b.transactions)
+                for t in b.transactions:
+                    print(t)
+                    print(t.timestamp)
+                    print(b)
+                    print(b.timestamp)
+                    transactionDelays.append(float(b.timestamp - t.timestamp[0]))
+        Statistics.transactionLatency = statistics.fmean(transactionDelays)
         Statistics.staleRate= round(Statistics.staleBlocks/Statistics.totalBlocks * 100, 2)
         Statistics.uncleRate==0
-        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans]
+        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans, Statistics.transactionLatency]
         Statistics.blocksResults+=[Statistics.blockData]
 
     ########################################################### Calculate and distibute rewards among the miners ###########################################################################################
@@ -85,7 +95,7 @@ class Statistics:
         #data = {'Stale Rate': Results.staleRate,'Uncle Rate': Results.uncleRate ,'# Stale Blocks': Results.staleBlocks,'# Total Blocks': Results.totalBlocks, '# Included Blocks': Results.mainBlocks, '# Uncle Blocks': Results.uncleBlocks}
 
         df2= pd.DataFrame(Statistics.blocksResults)
-        df2.columns= ['Total Blocks', 'Main Blocks', 'Uncle blocks', 'Uncle Rate', 'Stale Blocks', 'Stale Rate', '# transactions']
+        df2.columns= ['Total Blocks', 'Main Blocks', 'Uncle blocks', 'Uncle Rate', 'Stale Blocks', 'Stale Rate', '# transactions', 'transaction latency']
 
         df3 = pd.DataFrame(Statistics.profits)
         df3.columns = ['Miner ID', '% Hash Power','# Mined Blocks', '% of main blocks','# Uncle Blocks','% of uncles', 'Profit (in ETH)']

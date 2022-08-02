@@ -30,7 +30,7 @@ class Config:
 
     #is this a bad solution? it's probably bad to put all the nodes here, though where else would they go?
     ''' Block Parameters '''
-    Binterval = 30  # Average time (in seconds)for creating a block in the blockchain
+    Binterval = 2  # Average time (in seconds)for creating a block in the blockchain
     Bsize = 1.0
     Blimit = 8000000  # Gas limit
     Bdelay = 0.2  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
@@ -41,15 +41,15 @@ class Config:
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
-    Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
-    Tn = 100  # The rate of the number of transactions to be created per second
+    Ttechnique = "Full"  # Full/Light to specify the way of modelling transactions
+    Tn = 2000  # The rate of the number of transactions to be created per second
     # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 100  # the total number of nodes in the network
+    Nn = 200  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
