@@ -28,7 +28,7 @@ elif p.model == 4:
     from Models.Incentives import Incentives'''
 
 #note that we have 2 consensus files required for a lot of stuff
-match p.shardConsensus:
+'''match p.shardConsensus:
     case 0:
         from Consensus.Delay import Consensus
     case 1:
@@ -41,18 +41,29 @@ match p.shardConsensus:
 
 match p.stateCompaction:
     case 0:
-        from StateCompaction.Checkpoints import StateCompaction
+        from StateCompaction.Checkpoints import StateCompaction'''
 
 from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
 from Primitives.HarmonyONE.Node import Node
 
-match p.shardConsensus:
+'''match p.shardConsensus:
     case 0:
         from Primitives.HarmonyONE.BlockCommit import BlockCommit
     case 2: 
         from Primitives.HarmonyONE.BlockCommit import BlockCommit
     case 3:
-        from Primitives.SlotBased.BlockCommit import BlockCommit
+        from Primitives.SlotBased.BlockCommit import BlockCommit'''
+
+
+if p.shardConsensus == 0:
+    from Consensus.Delay import Consensus
+    from Primitives.HarmonyONE.BlockCommit import BlockCommit
+elif p.shardConsensus == 2:
+    from Consensus.Consensus import Consensus
+    from Primitives.HarmonyONE.BlockCommit import BlockCommit
+
+if p.stateCompaction == 0:
+    from StateCompaction.Checkpoints import StateCompaction
 
 ########################################################## Start Simulation ##############################################################
 def main(id):

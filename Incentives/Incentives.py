@@ -1,6 +1,6 @@
 from Config import Config as p
 
-match p.shardConsensus:
+'''match p.shardConsensus:
     case 0:
         from Consensus.Delay import Consensus as c
     case 1:
@@ -9,7 +9,12 @@ match p.shardConsensus:
         #from Consensus.HarmonyONE import Consensus
         from Consensus.Consensus import Consensus as c
     case 3:
-        from Consensus.SlotBased import Consensus as c
+        from Consensus.SlotBased import Consensus as c'''
+
+if p.shardConsensus == 0:
+    from Consensus.Delay import Consensus as c
+elif p.shardConsensus == 2:
+    from Consensus.Consensus import Consensus as c
 
 class Incentives:
 
