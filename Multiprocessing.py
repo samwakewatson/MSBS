@@ -12,7 +12,7 @@ if __name__ == '__main__':
     process_pool = multiprocessing.Pool(processes = len(ids))                                                        
     process_pool.map(main, ids)
 
-    g = Github("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")
+    g = Github("")
 
     repo = g.get_user().get_repo('testresults')
 

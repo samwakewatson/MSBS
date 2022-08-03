@@ -46,7 +46,10 @@ class Statistics:
                     print(b)
                     print(b.timestamp)
                     transactionDelays.append(float(b.timestamp - t.timestamp[0]))
-        Statistics.transactionLatency = statistics.fmean(transactionDelays)
+        try:
+            Statistics.transactionLatency = statistics.mean(transactionDelays)
+        except:
+            Statistics.transactionLatency = 0
         Statistics.staleRate= round(Statistics.staleBlocks/Statistics.totalBlocks * 100, 2)
         Statistics.uncleRate==0
         Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans, Statistics.transactionLatency]
@@ -109,7 +112,7 @@ class Statistics:
         df5 = pd.DataFrame(Network.latencyTable)
         df5.columns = [i for i in range(0, p.Nn)]
 
-        writer = pd.ExcelWriter(fname, engine='xlsxwriter')
+        writer = pd.ExcelWriter(fname, engine='openpyxl')
         df1.to_excel(writer, sheet_name='InputConfig')
         df2.to_excel(writer, sheet_name='SimOutput')
         df3.to_excel(writer, sheet_name='Profit')
