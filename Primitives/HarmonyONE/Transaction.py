@@ -58,7 +58,7 @@ class LightTransaction():
     def create_transactions():
 
         LightTransaction.pool=[]
-        Psize= int(p.Tn * p.Binterval)
+        Psize= int(p.Tn * p.simTime)
 
         #if LightTransaction.x<1:
         DistFit.fit() # fit distributions
@@ -71,6 +71,7 @@ class LightTransaction():
             tx.id= random.randrange(100000000000)
             tx.shardFrom = random.randint(0,p.numShards-1)
             tx.shardTo = random.randint(0,p.numShards-1)
+            tx.timestamp = random.randint(0,p.simTime-1) #don't really see why this should be an integer
             tx.isReceipt = False
             tx.sender = random.choice (p.NODES).id
             tx.to= random.choice (p.NODES).id
@@ -81,24 +82,24 @@ class LightTransaction():
 
             LightTransaction.pool += [tx]
 
-
-        random.shuffle(LightTransaction.pool)
+        print(len(LightTransaction.pool))
+        #random.shuffle(LightTransaction.pool) might need to add this back?
 
 
     ##### Select and execute a number of transactions to be added in the next block #####
-    def execute_transactions():
+    def execute_transactions(currentTime):
         transactions= [] # prepare a list of transactions to be included in the block
         limit = 0 # calculate the total block gaslimit
         count=0
         blocklimit = p.Blimit
 
         pool = sorted(LightTransaction.pool, key=lambda x: x.gasPrice, reverse=True) # sort pending transactions in the pool based on the gasPrice value
-
         while count < len(pool):
-                if  (blocklimit >= pool[count].gasLimit):
+                if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
+                    LightTransaction.pool.remove(pool[count]) #this is probably the slowest thing in existence
                 count+=1
 
         return transactions, limit

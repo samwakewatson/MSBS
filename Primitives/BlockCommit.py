@@ -1,4 +1,5 @@
 from Config import Config as p
+from Primitives.Transaction import LightTransaction
 
 #Currently BlockCommit kinda does way too much
 #We can maybe stand it doing most of the stuff set out here
@@ -106,10 +107,21 @@ class BlockCommit:
 
     # Update local blockchain, if necessary, upon receiving a new valid block. This method is only triggered if Full technique is used
     def update_transactionsPool(node,block):
-        j=0
-        while j < len(block.transactions):
-            for t in node.transactionsPool:
-                if  block.transactions[j].id == t.id:
-                    del t
-                    break
-            j+=1
+        if p.Ttechnique == "Full":
+            j=0
+            while j < len(block.transactions):
+                for t in node.transactionsPool:
+                    if  block.transactions[j].id == t.id:
+                        del t
+                        break
+                j+=1
+        elif p.Ttechnique == "Light":
+            '''j=0
+            #print(len(LightTransaction.pool))
+            while j < len(block.transactions):
+                for t in LightTransaction.pool:
+                    if  block.transactions[j].id == t.id:
+                        print("deleting {0}".format(t.id))
+                        del t
+                        break
+                j+=1'''

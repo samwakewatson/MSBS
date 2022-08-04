@@ -42,9 +42,9 @@ class Transaction(object):
 
 class LightTransaction():
 
-    pending_transactions=[] # shared pool of pending transactions
+    pool=[] # shared pool of pending transactions
 
-    def create_transactions():
+    '''def create_transactions():
 
         LightTransaction.pending_transactions=[]
         pool= LightTransaction.pending_transactions
@@ -64,11 +64,34 @@ class LightTransaction():
             pool += [tx]
 
 
-        random.shuffle(pool)
+        random.shuffle(pool)'''
+
+    def create_transactions():
+
+        LightTransaction.pending_transactions=[]
+        pool= LightTransaction.pending_transactions
+        Psize= int(p.Tn * p.simTime)
+
+
+        for i in range(Psize):
+            # assign values for transactions' attributes. You can ignore some attributes if not of an interest, and the default values will then be used
+            tx= Transaction()
+
+            tx.id= random.randrange(100000000000)
+            tx.timestamp = random.randint(0,p.simTime-1) #don't really see why this should be an integer
+            tx.sender = random.choice (p.NODES).id
+            tx.to= random.choice (p.NODES).id
+            tx.size= random.expovariate(1/p.Tsize)
+            tx.fee= random.expovariate(1/p.Tfee)
+
+            pool += [tx]
+
+       
+        random.shuffle(pool) #do we need this? maybe kinda slow
 
 
     ##### Select and execute a number of transactions to be added in the next block #####
-    def execute_transactions():
+    '''def execute_transactions():
         transactions= [] # prepare a list of transactions to be included in the block
         size = 0 # calculate the total block gaslimit
         count=0
@@ -79,6 +102,24 @@ class LightTransaction():
 
         while count < len(pool):
                 if  (blocksize >= pool[count].size):
+                    blocksize -= pool[count].size
+                    transactions += [pool[count]]
+                    size += pool[count].size
+                count+=1
+
+        return transactions, size'''
+
+    def execute_transactions(currentTime):
+        transactions= [] # prepare a list of transactions to be included in the block
+        size = 0 # calculate the total block gaslimit
+        count=0
+        blocksize = p.Bsize
+        pool= LightTransaction.pending_transactions
+
+        pool = sorted(pool, key=lambda x: x.fee, reverse=True) # sort pending transactions in the pool based on the gasPrice value
+
+        while count < len(pool):
+                if  (blocksize >= pool[count].size and pool[count].timestamp <= currentTime):
                     blocksize -= pool[count].size
                     transactions += [pool[count]]
                     size += pool[count].size

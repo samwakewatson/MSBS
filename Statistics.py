@@ -45,7 +45,8 @@ class Statistics:
                     print(t.timestamp)
                     print(b)
                     print(b.timestamp)
-                    transactionDelays.append(float(b.timestamp - t.timestamp[0]))
+                    #transactionDelays.append(float(b.timestamp - t.timestamp[0]))
+                    transactionDelays.append(float(b.timestamp - t.timestamp))
         try:
             Statistics.transactionLatency = statistics.mean(transactionDelays)
         except:

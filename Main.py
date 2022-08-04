@@ -66,7 +66,10 @@ if p.stateCompaction == 0:
     from StateCompaction.Checkpoints import StateCompaction
 
 ########################################################## Start Simulation ##############################################################
-def main(id):
+def main(id, config):
+
+    p.Tn = config["Tn"]
+
     start_time = time.time()
     for i in range(p.Runs):
         clock = 0  # set clock to 0 at the start of the simulation

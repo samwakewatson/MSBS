@@ -5,12 +5,19 @@ import base64
 from github import Github
 import pandas as pd
 import time
+import json
 
-ids = [0,1,2,3]                            
+
+#ids = [i for i in range (0,len(configs["configs"]))]                            
                                                                                 
-if __name__ == '__main__':                                                                                
-    process_pool = multiprocessing.Pool(processes = len(ids))                                                        
-    process_pool.map(main, ids)
+if __name__ == '__main__': 
+
+    f = open('experimentConfigs.json')
+    configs = json.load(f)
+    f.close()
+
+    process_pool = multiprocessing.Pool(processes = 8)                                                        
+    process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0,len(configs["configs"]))])
 
     g = Github("")
 
@@ -18,7 +25,7 @@ if __name__ == '__main__':
 
     timestamp = time.time()
 
-    for id in ids:
+    for id in range (0,len(configs["configs"])):
         read_file = pd.read_excel (r'ID{0}.xlsx'.format(id), sheet_name="Shard 0")
         read_file.to_csv (r'ID{0}.txt'.format(id), index = None, header=True)
 

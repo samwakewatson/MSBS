@@ -32,7 +32,7 @@ class Config:
     ''' Block Parameters '''
     Binterval = 2  # Average time (in seconds)for creating a block in the blockchain
     Bsize = 1.0
-    Blimit = 8000000  # Gas limit
+    Blimit = 80000000  # Gas limit
     Bdelay = 0.2  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
     Breward = 12.5  # Reward for mining a block
     slotTime = 2 #time each slot takes - doesn't exactly mimic harmony
@@ -41,15 +41,15 @@ class Config:
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
-    Ttechnique = "Full"  # Full/Light to specify the way of modelling transactions
-    Tn = 2000  # The rate of the number of transactions to be created per second
+    Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
+    Tn = 140  # The rate of the number of transactions to be created per second
     # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
     Tsize = 0.000546  # The average transaction size  in MB
 
     ''' Node Parameters '''
-    Nn = 200  # the total number of nodes in the network
+    Nn = 150  # the total number of nodes in the network
     NODES = []
     from Primitives.HarmonyONE.Node import Node
 
@@ -61,7 +61,7 @@ class Config:
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each epoch
 
     ''' Simulation Parameters '''
-    simTime = 300 # the simulation length (in seconds)
+    simTime = 1000 # the simulation length (in seconds)
     Runs = 1  # Number of simulation runs
 
 

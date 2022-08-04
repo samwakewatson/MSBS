@@ -48,7 +48,7 @@ class BlockCommit(BaseBlockCommit):
         if blockPrev == miner.last_block(blockShard).id:
             Statistics.totalBlocks += 1 # count # of total blocks created!
             if p.hasTrans:
-                if p.Ttechnique == "Light": blockTrans,blockSize = LT.execute_transactions()
+                if p.Ttechnique == "Light": blockTrans,blockSize = LT.execute_transactions(eventTime)
                 elif p.Ttechnique == "Full": blockTrans,blockSize = FT.execute_transactions(miner,blockShard,eventTime)
 
                 event.block.transactions = blockTrans
@@ -137,7 +137,8 @@ class BlockCommit(BaseBlockCommit):
             #### case 1: the received block is built on top of the last block according to the recipient's blockchain ####
             if blockPrev == lastBlockId:
                 node.blockchain[blockShard].append(event.block) # append the block to local blockchain
-                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node, event.block)
+                #if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node, event.block)
+                BlockCommit.update_transactionsPool(node, event.block) #this will be called wayyyy too much
                 #BlockCommit.generate_next_block(node,currentTime)# Start mining or working on the next block
 
             #### case 2: the received block is  not built on top of the last block ####
@@ -147,7 +148,8 @@ class BlockCommit(BaseBlockCommit):
                     BlockCommit.update_local_blockchain(node,miner,blockShard,depth)
                     #BlockCommit.generate_next_block(node,currentTime)# Start mining or working on the next block
 
-                if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,event.block) # not sure yet.
+                #if p.hasTrans and p.Ttechnique == "Full": BlockCommit.update_transactionsPool(node,event.block) # not sure yet.
+                BlockCommit.update_transactionsPool(node, event.block)
 
     # Upon generating or receiving a block, the miner start working on the next block as in POW
     '''def generate_next_block(node,currentTime):
