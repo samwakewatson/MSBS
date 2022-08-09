@@ -123,6 +123,11 @@ class Statistics:
 
         writer.save()
 
+    ########################################################### Draw some graphs ##########################################################
+    #so we want to save all the results of the various simulations and output some graphs all at once
+    #so we need to fix the multithreading, or at least store some data between runs
+    #what in particular do we need graphs of? tps generated vs latency, tps vs ?, miner profits?
+
     ########################################################### Reset all global variables used to calculate the simulation results ###########################################################################################
     def reset():
         Statistics.totalBlocks=0

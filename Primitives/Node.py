@@ -71,5 +71,5 @@ class Node(object):
         for node in p.NODES:
             node.blockchain= [] # create an array for each miner to store chain state locally
             node.transactionsPool= []
-            node.blocks=[] # total number of blocks mined in the main chain
+            node.blocks= 0#[] # total number of blocks mined in the main chain
             node.balance= 0 # to count all reward that a miner made

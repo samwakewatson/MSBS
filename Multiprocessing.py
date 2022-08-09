@@ -16,10 +16,12 @@ if __name__ == '__main__':
     configs = json.load(f)
     f.close()
 
-    process_pool = multiprocessing.Pool(processes = 8)                                                        
-    process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0,len(configs["configs"]))])
+    numThreads = 4
 
-    g = Github("")
+    process_pool = multiprocessing.Pool(processes = numThreads)                                                      
+    process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
+
+    g = Github("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")
 
     repo = g.get_user().get_repo('testresults')
 
