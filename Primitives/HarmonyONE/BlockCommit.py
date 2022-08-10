@@ -48,7 +48,7 @@ class BlockCommit(BaseBlockCommit):
         if blockPrev == miner.last_block(blockShard).id:
             Statistics.totalBlocks += 1 # count # of total blocks created!
             if p.hasTrans:
-                if p.Ttechnique == "Light": blockTrans,blockSize = LT.execute_transactions(eventTime)
+                if p.Ttechnique == "Light": blockTrans,blockSize = LT.execute_transactions(eventTime,blockShard)
                 elif p.Ttechnique == "Full": blockTrans,blockSize = FT.execute_transactions(miner,blockShard,eventTime)
 
                 event.block.transactions = blockTrans

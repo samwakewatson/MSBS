@@ -47,6 +47,7 @@ class Config:
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
     Tsize = 0.000546  # The average transaction size  in MB
+    crossShardProportion = 0.25 #The fraction of transaction that are cross shard
 
     ''' Node Parameters '''
     Nn = 150  # the total number of nodes in the network

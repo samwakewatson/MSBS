@@ -70,7 +70,13 @@ class LightTransaction():
 
             tx.id= random.randrange(100000000000)
             tx.shardFrom = random.randint(0,p.numShards-1)
-            tx.shardTo = random.randint(0,p.numShards-1)
+
+            if i < p.crossShardProportion * Psize:
+                tx.shardTo = random.randint(0,p.numShards-1)#this doesn't really give us as many as we want it to, can return sameshard tx
+            else:
+                tx.shardTo = tx.shardFrom
+
+
             tx.timestamp = random.randint(0,p.simTime-1) #don't really see why this should be an integer
             tx.isReceipt = False
             tx.sender = random.choice (p.NODES).id
@@ -87,19 +93,30 @@ class LightTransaction():
 
 
     ##### Select and execute a number of transactions to be added in the next block #####
-    def execute_transactions(currentTime):
+    def execute_transactions(currentTime, shard):
         transactions= [] # prepare a list of transactions to be included in the block
         limit = 0 # calculate the total block gaslimit
         count=0
         blocklimit = p.Blimit
 
+        #add the logic for cross shard transactions
         pool = sorted(LightTransaction.pool, key=lambda x: x.gasPrice, reverse=True) # sort pending transactions in the pool based on the gasPrice value
         while count < len(pool):
-                if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime):
+                if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom == shard):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
                     LightTransaction.pool.remove(pool[count]) #this is probably the slowest thing in existence
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo != shard and pool[count].shardFrom == shard):
+                    #we need to include the transaction, then make another one to go to the other shard
+                    blocklimit -= pool[count].usedGas
+                    transactions += [pool[count]]
+                    limit += pool[count].usedGas
+                    pool[count].isReceipt = True
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
+                    blocklimit -= pool[count].usedGas
+                    transactions += [pool[count]]
+                    limit += pool[count].usedGas
                 count+=1
 
         return transactions, limit
@@ -120,7 +137,12 @@ class FullTransaction():
 
             tx.id= random.randrange(100000000000)
             tx.shardFrom = random.randint(0,p.numShards-1)
-            tx.shardTo = random.randint(0,p.numShards-1)
+            
+            if i < p.crossShardProportion * Psize:
+                tx.shardTo = random.randint(0,p.numShards-1)#this doesn't really give us as many as we want it to, can return sameshard tx
+            else:
+                tx.shardTo = tx.shardFrom
+
             creation_time= random.randint(0,p.simTime-1)
             receive_time= creation_time
             tx.timestamp= [creation_time,receive_time]
