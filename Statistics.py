@@ -41,10 +41,10 @@ class Statistics:
                 Statistics.uncleBlocks = 0
                 trans += len(b.transactions)
                 for t in b.transactions:
-                    print(t)
-                    print(t.timestamp)
-                    print(b)
-                    print(b.timestamp)
+                    #print(t)
+                    #print(t.timestamp)
+                    #print(b)
+                    #print(b.timestamp)
                     #transactionDelays.append(float(b.timestamp - t.timestamp[0]))
                     transactionDelays.append(float(b.timestamp - t.timestamp))
         try:

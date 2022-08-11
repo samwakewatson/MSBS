@@ -55,10 +55,12 @@ class LightTransaction():
     pool=[] # shared pool of pending transactions
     #x=0 # counter to only fit distributions once during the simulation
 
-    def create_transactions():
+    def create_transactions(currentTime):
 
-        LightTransaction.pool=[]
-        Psize= int(p.Tn * p.simTime)
+        #LightTransaction.pool=[]
+        #Psize= int(p.Tn * p.simTime)
+
+        Psize = int(p.Tn * p.Binterval)
 
         #if LightTransaction.x<1:
         DistFit.fit() # fit distributions
@@ -77,7 +79,7 @@ class LightTransaction():
                 tx.shardTo = tx.shardFrom
 
 
-            tx.timestamp = random.randint(0,p.simTime-1) #don't really see why this should be an integer
+            tx.timestamp = random.uniform(currentTime,min(currentTime + p.Binterval,p.simTime - 1))
             tx.isReceipt = False
             tx.sender = random.choice (p.NODES).id
             tx.to= random.choice (p.NODES).id
@@ -106,17 +108,18 @@ class LightTransaction():
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
-                    LightTransaction.pool.remove(pool[count]) #this is probably the slowest thing in existence
-                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo != shard and pool[count].shardFrom == shard):
+                    LightTransaction.pool.remove(pool[count]) #Note WE HAVE 2 DIFFERENT POOLS HERE
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo != shard and pool[count].shardFrom == shard):
                     #we need to include the transaction, then make another one to go to the other shard
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
                     pool[count].isReceipt = True
-                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp[1] <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
+                elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
                     limit += pool[count].usedGas
+                    LightTransaction.pool.remove(pool[count]) 
                 count+=1
 
         return transactions, limit

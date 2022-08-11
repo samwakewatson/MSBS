@@ -75,7 +75,7 @@ def main(id, config):
         clock = 0  # set clock to 0 at the start of the simulation
         if p.hasTrans:
             if p.Ttechnique == "Light":
-                LT.create_transactions()  # generate pending transactions
+                LT.create_transactions(clock)  # generate pending transactions
             elif p.Ttechnique == "Full":
                 FT.create_transactions()  # generate pending transactions
 

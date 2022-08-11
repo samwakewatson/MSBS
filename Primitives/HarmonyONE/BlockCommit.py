@@ -57,7 +57,7 @@ class BlockCommit(BaseBlockCommit):
             #miner.blockchain[blockShard].append(event.block)
             miner.change_block(blockShard, event.block.depth, event.block)
 
-            #if p.hasTrans and p.Ttechnique == "Light":LT.create_transactions() # generate transactions
+            if p.hasTrans and p.Ttechnique == "Light" and blockShard == 0:LT.create_transactions(event.time) # generate transactions
 
             BlockCommit.propagate_block(event.block)
             #BlockCommit.generate_next_block(miner,eventTime)# Start mining or working on the next block

@@ -41,7 +41,7 @@ class StateCompaction:
         #c.fork_resolution()
         c.fork_resolution()
         checkpoints = c.global_chain[shard][0::p.epochLength]
-        print(checkpoints)
+        #print(checkpoints)
         for node in p.NODES:
             lastBlock = node.blockchain_height(shard)
             '''if lastBlock != c.global_chain[shard][-1].depth:
