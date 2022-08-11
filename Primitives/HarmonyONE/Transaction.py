@@ -124,6 +124,10 @@ class LightTransaction():
 
         return transactions, limit
 
+
+    def resetState():
+        LightTransaction.pool = []
+
 class FullTransaction():
     x=0 # counter to only fit distributions once during the simulation
 
