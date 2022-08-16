@@ -5,6 +5,7 @@ import numpy as np
 from Network.Network import Network
 import operator
 from Primitives.HarmonyONE.Distribution.DistFit import DistFit
+import copy
 
 class Transaction(object):
 
@@ -112,9 +113,9 @@ class LightTransaction():
                 elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo != shard and pool[count].shardFrom == shard):
                     #we need to include the transaction, then make another one to go to the other shard
                     blocklimit -= pool[count].usedGas
-                    transactions += [pool[count]]
+                    transactions += [copy.deepcopy(pool[count])]
                     limit += pool[count].usedGas
-                    pool[count].isReceipt = True
+                    pool[count].isReceipt = True #need to make a new tx 
                 elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]

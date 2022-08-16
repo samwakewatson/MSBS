@@ -2,67 +2,88 @@
     "configs" : [
 
         {
-            "Tn" : 3000
+            "Tn" : 2000,
+            "crossShardProportion" : 0.17
         },
 
         {
-            "Tn" : 1600
+            "Tn" : 2000,
+            "crossShardProportion" : 0.18
         },
 
         {
-            "Tn" : 1700
+            "Tn" : 2000,
+            "crossShardProportion" : 0.19
         },
 
         {
-            "Tn" : 1800
+            "Tn" : 2000,
+            "crossShardProportion" : 0.20
         },
 
         {
-            "Tn" : 1900
+            "Tn" : 2000,
+            "crossShardProportion" : 0.21
         },
 
         {
-            "Tn" : 2000
+            "Tn" : 2000,
+            "crossShardProportion" : 0.22
         },
 
         {
-            "Tn" : 2100
+            "Tn" : 2000,
+            "crossShardProportion" : 0.23
         },
 
         {
-            "Tn" : 2200
+            "Tn" : 2000,
+            "crossShardProportion" : 0.24
+        },
+
+        {
+            "Tn" : 2000,
+            "crossShardProportion" : 0.25
         },
         
         {
-            "Tn" : 2300
+            "Tn" : 2000,
+            "crossShardProportion" : 0.26
         },
 
         {
-            "Tn" : 2400
+            "Tn" : 2000,
+            "crossShardProportion" : 0.27
         },
 
         {
-            "Tn" : 2500
+            "Tn" : 2000,
+            "crossShardProportion" : 0.28
         },
 
         {
-            "Tn" : 2600
+            "Tn" : 2000,
+            "crossShardProportion" : 0.29
         },
 
         {
-            "Tn" : 2700
+            "Tn" : 2000,
+            "crossShardProportion" : 0.30
         },
 
         {
-            "Tn" : 2800
+            "Tn" : 2000,
+            "crossShardProportion" : 0.31
         },
 
         {
-            "Tn" : 2900
+            "Tn" : 2000,
+            "crossShardProportion" : 0.32
         },
 
         {
-            "Tn" : 3000
+            "Tn" : 2000,
+            "crossShardProportion" : 0.33
         }
     ]
 }

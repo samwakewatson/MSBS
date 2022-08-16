@@ -1,3 +1,4 @@
+from audioop import cross
 from Config import Config as p
 from Consensus.BaseConsensus import Consensus as c
 from Incentives.Incentives import Incentives
@@ -17,6 +18,8 @@ class Statistics:
     uncleRate=0
     staleRate=0
     transactionLatency=0
+    crossShardTxLatency=0
+    perShardFees=[]
     blockData=[]
     blocksResults=[]
     profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
@@ -33,10 +36,13 @@ class Statistics:
     def blocks_results():
         trans = 0
         transactionDelays = []
+        crossShardTxDelays = []
+        fees = []
 
         Statistics.mainBlocks= sum([len(i) for i in c.global_chain])
         Statistics.staleBlocks = Statistics.totalBlocks - Statistics.mainBlocks
         for s in range(0,p.numShards):
+            fees.append([])
             for b in c.global_chain[s]:
                 Statistics.uncleBlocks = 0
                 trans += len(b.transactions)
@@ -46,15 +52,23 @@ class Statistics:
                     #print(b)
                     #print(b.timestamp)
                     #transactionDelays.append(float(b.timestamp - t.timestamp[0]))
-                    transactionDelays.append(float(b.timestamp - t.timestamp))
+                    fees[s].append(t.fee)
+                    if t.isReceipt == False:
+                        transactionDelays.append(float(b.timestamp - t.timestamp))
+                    else:
+                        crossShardTxDelays.append(float(b.timestamp - t.timestamp))
         try:
             Statistics.transactionLatency = statistics.mean(transactionDelays)
+            Statistics.crossShardTxLatency = statistics.mean(crossShardTxDelays)
         except:
             Statistics.transactionLatency = 0
+            Statistics.crossShardTxLatency = 0
+   
         Statistics.staleRate= round(Statistics.staleBlocks/Statistics.totalBlocks * 100, 2)
         Statistics.uncleRate==0
-        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans, Statistics.transactionLatency]
+        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans, Statistics.transactionLatency, Statistics.crossShardTxLatency]
         Statistics.blocksResults+=[Statistics.blockData]
+        Statistics.perShardFees += [statistics.mean(fees[s]) for s in range(0,p.numShards)]
 
     ########################################################### Calculate and distibute rewards among the miners ###########################################################################################
     def profit_results():
@@ -95,11 +109,11 @@ class Statistics:
     ########################################################### Print simulation results to Excel ###########################################################################################
     def print_to_excel(fname):
 
-        df1 = pd.DataFrame({'Block Time': [p.Binterval], 'Block Propagation Delay': [p.Bdelay], 'No. Miners': [len(p.NODES)], 'Simulation Time': [p.simTime]})
+        df1 = pd.DataFrame({'Block Time': [p.Binterval], 'Block Propagation Delay': [p.Bdelay], 'No. Miners': [len(p.NODES)], 'Simulation Time': [p.simTime], 'Tx Generated per second': [p.Tn], 'CrossShard proportion':[p.crossShardProportion]})
         #data = {'Stale Rate': Results.staleRate,'Uncle Rate': Results.uncleRate ,'# Stale Blocks': Results.staleBlocks,'# Total Blocks': Results.totalBlocks, '# Included Blocks': Results.mainBlocks, '# Uncle Blocks': Results.uncleBlocks}
 
         df2= pd.DataFrame(Statistics.blocksResults)
-        df2.columns= ['Total Blocks', 'Main Blocks', 'Uncle blocks', 'Uncle Rate', 'Stale Blocks', 'Stale Rate', '# transactions', 'transaction latency']
+        df2.columns= ['Total Blocks', 'Main Blocks', 'Uncle blocks', 'Uncle Rate', 'Stale Blocks', 'Stale Rate', '# transactions', 'transaction latency', 'cross shard tx latency']
 
         df3 = pd.DataFrame(Statistics.profits)
         df3.columns = ['Miner ID', '% Hash Power','# Mined Blocks', '% of main blocks','# Uncle Blocks','% of uncles', 'Profit (in ETH)']
@@ -113,6 +127,9 @@ class Statistics:
         df5 = pd.DataFrame(Network.latencyTable)
         df5.columns = [i for i in range(0, p.Nn)]
 
+        df6 = pd.DataFrame(Statistics.perShardFees)
+        #df6.columns = [s for s in range(0, 4)]
+        
         writer = pd.ExcelWriter(fname, engine='openpyxl')
         df1.to_excel(writer, sheet_name='InputConfig')
         df2.to_excel(writer, sheet_name='SimOutput')
@@ -120,6 +137,7 @@ class Statistics:
         for s in range(0,p.numShards):
             df4[s].to_excel(writer,sheet_name='Shard '+str(s))
         df5.to_excel(writer, sheet_name='Network')
+        df6.to_excel(writer, sheet_name='Per Shard Fees')
 
         writer.save()
 
@@ -141,6 +159,9 @@ class Statistics:
 
     def reset2():
         Statistics.blocksResults=[]
+        Statistics.perShardFees=[]
         Statistics.profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
         Statistics.index=0
         Statistics.chain=[]
+        Statistics.transactionLatency=0
+        Statistics.crossShardTxLatency=0

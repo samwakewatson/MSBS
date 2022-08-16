@@ -43,7 +43,7 @@ match p.stateCompaction:
     case 0:
         from StateCompaction.Checkpoints import StateCompaction'''
 
-from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT
+from Primitives.HarmonyONE.Transaction import LightTransaction as LT, FullTransaction as FT, Transaction
 from Primitives.HarmonyONE.Node import Node
 
 '''match p.shardConsensus:
@@ -69,6 +69,7 @@ if p.stateCompaction == 0:
 def main(id, config):
 
     p.Tn = config["Tn"]
+    p.crossShardProportion = config["crossShardProportion"]
 
     start_time = time.time()
     for i in range(p.Runs):
@@ -99,6 +100,7 @@ def main(id, config):
         ########## reset all global variable before the next run #############
         Statistics.reset()  # reset all variables used to calculate the results
         Node.resetState()  # reset all the states (blockchains) for all nodes in the network
+        LT.resetState()
         if p.Ttechnique == "Light": LT.resetState()
         '''fname = "Timestamp{0}_ID{1}.xlsx".format(
             time.time(), id)'''
