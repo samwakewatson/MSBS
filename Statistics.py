@@ -17,6 +17,7 @@ class Statistics:
     staleBlocks=0
     uncleRate=0
     staleRate=0
+    numTransactions=0
     transactionLatency=0
     crossShardTxLatency=0
     perShardFees=[]
@@ -34,7 +35,6 @@ class Statistics:
 
     ########################################################### Calculate block statistics Results ###########################################################################################
     def blocks_results():
-        trans = 0
         transactionDelays = []
         crossShardTxDelays = []
         fees = []
@@ -45,7 +45,7 @@ class Statistics:
             fees.append([])
             for b in c.global_chain[s]:
                 Statistics.uncleBlocks = 0
-                trans += len(b.transactions)
+                Statistics.numTransactions += len(b.transactions)
                 for t in b.transactions:
                     #print(t)
                     #print(t.timestamp)
@@ -57,16 +57,20 @@ class Statistics:
                         transactionDelays.append(float(b.timestamp - t.timestamp))
                     else:
                         crossShardTxDelays.append(float(b.timestamp - t.timestamp))
+        #this breaks if we have no cross shard tx
         try:
             Statistics.transactionLatency = statistics.mean(transactionDelays)
-            Statistics.crossShardTxLatency = statistics.mean(crossShardTxDelays)
         except:
             Statistics.transactionLatency = 0
+
+        try:
+            Statistics.crossShardTxLatency = statistics.mean(crossShardTxDelays)
+        except:
             Statistics.crossShardTxLatency = 0
    
         Statistics.staleRate= round(Statistics.staleBlocks/Statistics.totalBlocks * 100, 2)
         Statistics.uncleRate==0
-        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, trans, Statistics.transactionLatency, Statistics.crossShardTxLatency]
+        Statistics.blockData = [ Statistics.totalBlocks, Statistics.mainBlocks,  Statistics.uncleBlocks, Statistics.uncleRate, Statistics.staleBlocks, Statistics.staleRate, Statistics.numTransactions, Statistics.transactionLatency, Statistics.crossShardTxLatency]
         Statistics.blocksResults+=[Statistics.blockData]
         Statistics.perShardFees += [statistics.mean(fees[s]) for s in range(0,p.numShards)]
 
@@ -141,6 +145,15 @@ class Statistics:
 
         writer.save()
 
+    def returnValue(value):
+        if value == "totalTx":
+            return Statistics.numTransactions
+        elif value == "sameShardTxLatency":
+            return Statistics.transactionLatency
+        elif value == "crossShardTxLatency":
+            return Statistics.crossShardTxLatency
+        
+
     ########################################################### Draw some graphs ##########################################################
     #so we want to save all the results of the various simulations and output some graphs all at once
     #so we need to fix the multithreading, or at least store some data between runs
@@ -165,3 +178,4 @@ class Statistics:
         Statistics.chain=[]
         Statistics.transactionLatency=0
         Statistics.crossShardTxLatency=0
+        Statistics.numTransactions=0

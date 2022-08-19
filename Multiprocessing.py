@@ -7,7 +7,7 @@ import pandas as pd
 import time
 import json
 
-#import matplotlib.pyplot as plt
+from matplotlib import pyplot as plt
 
 
 #ids = [i for i in range (0,len(configs["configs"]))]                            
@@ -18,18 +18,26 @@ if __name__ == '__main__':
     configs = json.load(f)
     f.close()
 
-    numThreads = 6
+    numThreads = 8
 
     process_pool = multiprocessing.Pool(processes = numThreads)                                                      
-    process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
+    results = process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
 
-    g = Github("")
+    #g = Github("")
 
-    repo = g.get_user().get_repo('testresults')
+    #repo = g.get_user().get_repo('testresults')
 
     timestamp = time.time()
 
-    for id in range (0,len(configs["configs"])):
+    #plt.plot([result["crossShardProp"] for result in results], [result["sameShardTxLatency"] for result in results]) 
+    #plt.plot([result["crossShardProp"] for result in results], [result["crossShardTxLatency"] for result in results])
+
+    plt.plot([result["Nn"] for result in results],[result["sameShardTxLatency"] for result in results])
+    plt.plot([result["Nn"] for result in results],[result["crossShardTxLatency"] for result in results])
+
+    plt.show()
+
+    '''for id in range (0,len(configs["configs"])):
         read_file = pd.read_excel (r'ID{0}.xlsx'.format(id), sheet_name="Shard 0")
         read_file.to_csv (r'ID{0}.txt'.format(id), index = None, header=True)
 
@@ -50,7 +58,7 @@ if __name__ == '__main__':
         # Upload to github
         git_file = "ID{0}_Timestamp{1}".format(id, timestamp) + "/SimOutput"
         repo.create_file(git_file, "committing files", content, branch="main")
-        print(git_file + ' CREATED')
+        print(git_file + ' CREATED')'''
 
     #read_file = pd.read_excel (r'ID0.xlsx', sheet_name="Shard 0")
     #read_file.to_csv (r'ID0.txt', index = None, header=True)

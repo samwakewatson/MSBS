@@ -70,6 +70,7 @@ def main(id, config):
 
     p.Tn = config["Tn"]
     p.crossShardProportion = config["crossShardProportion"]
+    #p.Nn = config["Nn"]
 
     start_time = time.time()
     for i in range(p.Runs):
@@ -100,15 +101,17 @@ def main(id, config):
         ########## reset all global variable before the next run #############
         Statistics.reset()  # reset all variables used to calculate the results
         Node.resetState()  # reset all the states (blockchains) for all nodes in the network
-        LT.resetState()
         if p.Ttechnique == "Light": LT.resetState()
         '''fname = "Timestamp{0}_ID{1}.xlsx".format(
             time.time(), id)'''
         fname = "ID{0}.xlsx".format(id)
         # print all the simulation results in an excel file
+        results = {"Nn": p.Nn, "Tn" : p.Tn, "crossShardProp" : p.crossShardProportion, "sameShardTxLatency" : Statistics.returnValue("sameShardTxLatency"),
+         "crossShardTxLatency" : Statistics.returnValue("crossShardTxLatency"), "totalTx" : Statistics.returnValue("totalTx")}
         Statistics.print_to_excel(fname)
         Statistics.reset2()  # reset profit results
     print("Process finished --- %s seconds ---" % (time.time() - start_time))
+    return results
 
 
 ######################################################## Run Main method #####################################################################
