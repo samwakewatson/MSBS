@@ -18,7 +18,7 @@ if __name__ == '__main__':
     configs = json.load(f)
     f.close()
 
-    numThreads = 8
+    numThreads = 6
 
     process_pool = multiprocessing.Pool(processes = numThreads)                                                      
     results = process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
@@ -32,8 +32,25 @@ if __name__ == '__main__':
     #plt.plot([result["crossShardProp"] for result in results], [result["sameShardTxLatency"] for result in results]) 
     #plt.plot([result["crossShardProp"] for result in results], [result["crossShardTxLatency"] for result in results])
 
-    plt.plot([result["Nn"] for result in results],[result["sameShardTxLatency"] for result in results])
-    plt.plot([result["Nn"] for result in results],[result["crossShardTxLatency"] for result in results])
+    #plt.plot([result["crossShardProp"] for result in results],[result["sameShardTxLatency"] for result in results])
+    #plt.plot([result["crossShardProp"] for result in results],[result["crossShardTxLatency"] for result in results])
+
+    x1 = []
+    y1 = []
+    for resultSet in results:
+        for datapoint in resultSet:
+            x1.append(datapoint["crossShardProp"])
+            y1.append(datapoint["sameShardTxLatency"])
+
+    x2 = []
+    y2 = []
+    for resultSet in results:
+        for datapoint in resultSet:
+            x2.append(datapoint["crossShardProp"])
+            y2.append(datapoint["crossShardTxLatency"])
+
+    plt.scatter(x1,y1)
+    plt.scatter(x2,y2)
 
     plt.show()
 

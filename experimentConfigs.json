@@ -3,104 +3,87 @@
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 200
+            "crossShardProportion" : 0
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 250
+            "crossShardProportion" : 0.03
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 300
+            "crossShardProportion" : 0.06
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 350
+            "crossShardProportion" : 0.09
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 400
+            "crossShardProportion" : 0.12
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 450
+            "crossShardProportion" : 0.15
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 500
+            "crossShardProportion" : 0.18
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 550
+            "crossShardProportion" : 0.21
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 600
+            "crossShardProportion" : 0.24
         },
         
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 650
+            "crossShardProportion" : 0.27
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 700
+            "crossShardProportion" : 0.30
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 750
+            "crossShardProportion" : 0.33
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 800
+            "crossShardProportion" : 0.36
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 850
+            "crossShardProportion" : 0.39
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 900
+            "crossShardProportion" : 0.42
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 950
+            "crossShardProportion" : 0.45
         },
 
         {
             "Tn" : 3500,
-            "crossShardProportion" : 0.1,
-            "Nn" : 1000
+            "crossShardProportion" : 0.48
         }
     ]
 }

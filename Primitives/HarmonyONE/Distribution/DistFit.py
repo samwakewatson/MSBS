@@ -25,8 +25,8 @@ class DistFit():
 
     def fit():
         if DistFit.x<1:
-            df= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xls",sheet_name="Set1")
-            df2= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xls",sheet_name="Set2")
+            df= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xlsx",sheet_name="Set1")
+            df2= pd.read_excel("Primitives/HarmonyONE/Distribution/Data_sets.xlsx",sheet_name="Set2")
             DistFit.cgas,DistFit.cprice,DistFit.ctime= DistFit.creation_fit(df) # fitted models (u:used gas, p: gas price, t: cpu time)
             DistFit.egas,DistFit.eprice,DistFit.etime= DistFit.execution_fit(df2)
             DistFit.x+=1

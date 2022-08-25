@@ -16,3 +16,4 @@ upon publishing the first half of a transaction
 
 '''
 
+'''FOR RECEIPT BASED MODEL THIS IS JUST MANAGED IN THE TRANSCATION.PY!!!'''

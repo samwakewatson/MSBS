@@ -68,6 +68,8 @@ if p.stateCompaction == 0:
 ########################################################## Start Simulation ##############################################################
 def main(id, config):
 
+    results = []
+
     p.Tn = config["Tn"]
     p.crossShardProportion = config["crossShardProportion"]
     #p.Nn = config["Nn"]
@@ -106,8 +108,8 @@ def main(id, config):
             time.time(), id)'''
         fname = "ID{0}.xlsx".format(id)
         # print all the simulation results in an excel file
-        results = {"Nn": p.Nn, "Tn" : p.Tn, "crossShardProp" : p.crossShardProportion, "sameShardTxLatency" : Statistics.returnValue("sameShardTxLatency"),
-         "crossShardTxLatency" : Statistics.returnValue("crossShardTxLatency"), "totalTx" : Statistics.returnValue("totalTx")}
+        results.append({"Nn": p.Nn, "Tn" : p.Tn, "crossShardProp" : p.crossShardProportion, "sameShardTxLatency" : Statistics.returnValue("sameShardTxLatency"),
+         "crossShardTxLatency" : Statistics.returnValue("crossShardTxLatency"), "totalTx" : Statistics.returnValue("totalTx")})
         Statistics.print_to_excel(fname)
         Statistics.reset2()  # reset profit results
     print("Process finished --- %s seconds ---" % (time.time() - start_time))

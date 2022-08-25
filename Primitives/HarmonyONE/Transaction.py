@@ -64,8 +64,8 @@ class LightTransaction():
         Psize = int(p.Tn * p.Binterval)
 
         #if LightTransaction.x<1:
-        DistFit.fit() # fit distributions
-        gasLimit,usedGas,gasPrice,_ = DistFit.sample_transactions(Psize) # sampling gas based attributes for transactions from specific distribution
+        #DistFit.fit() # fit distributions
+        #gasLimit,usedGas,gasPrice,_ = DistFit.sample_transactions(Psize) # sampling gas based attributes for transactions from specific distribution
 
         for i in range(0,Psize):
             # assign values for transactions' attributes. You can ignore some attributes if not of an interest, and the default values will then be used
@@ -82,16 +82,17 @@ class LightTransaction():
 
             tx.timestamp = random.uniform(currentTime,min(currentTime + p.Binterval,p.simTime - 1))
             tx.isReceipt = False
-            tx.sender = random.choice (p.NODES).id
-            tx.to= random.choice (p.NODES).id#
+            tx.sender = random.choice(p.NODES).id
+            tx.to= random.choice(p.NODES).id
 
-            tx.gasLimit=gasLimit[i]
-            tx.usedGas=usedGas[i]
-            tx.gasPrice=gasPrice[i]/1000000000
+            #tx.gasLimit=gasLimit[i]
+            #tx.usedGas=usedGas[i]
+            #tx.gasPrice=gasPrice[i]/1000000000
 
-            tx.gasLimit=40000
+            tx.gasLimit=50000
             tx.usedGas=40000
-            tx.gasPrice=32/1000000000
+            #tx.gasPrice=random.expovariate(1/32)/1000000000
+            tx.gasPrice=random.expovariate(1/32)
 
             tx.fee= tx.usedGas * tx.gasPrice
 
@@ -109,11 +110,12 @@ class LightTransaction():
         blocklimit = p.Blimit
 
         #add the logic for cross shard transactions
-        pool = sorted(LightTransaction.pool, key=lambda x: x.gasPrice, reverse=True) # sort pending transactions in the pool based on the gasPrice value
+        '''pool = sorted(LightTransaction.pool, key=lambda x: x.gasPrice, reverse=True) # sort pending transactions in the pool based on the gasPrice value
         
         #remove the tx that will probably never be confirmed: need to check this doesnt mess up our results too much
-        pool = pool[0:p.Tn * 4]
-        LightTransaction.pool = pool #this might destroy everything
+        #this messes with the results quite a lot
+        pool = pool[0:p.Tn * 6]
+        LightTransaction.pool = copy.deepcopy(pool) #this might destroy everything
 
         while count < len(pool):
                 if  (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom == shard):
@@ -127,6 +129,8 @@ class LightTransaction():
                     transactions += [copy.deepcopy(pool[count])]
                     limit += pool[count].usedGas
                     pool[count].isReceipt = True #need to make a new tx 
+                    LightTransaction.pool.remove(transactions[-1])
+                    LightTransaction.pool += [copy.deepcopy(pool[count])]
                 elif (blocklimit >= pool[count].gasLimit and pool[count].timestamp <= currentTime and pool[count].shardTo == shard and pool[count].shardFrom != shard and pool[count].isReceipt == True):
                     blocklimit -= pool[count].usedGas
                     transactions += [pool[count]]
@@ -134,8 +138,18 @@ class LightTransaction():
                     LightTransaction.pool.remove(pool[count]) 
                 count+=1
 
-        return transactions, limit
+        return transactions, limit'''
 
+        LightTransaction.pool.sort(key=lambda x: x.gasPrice, reverse=True)
+
+        while count < len(LightTransaction.pool):
+            if  (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo == shard and LightTransaction.pool[count].shardFrom == shard):
+                blocklimit -= LightTransaction.pool[count].usedGas
+                transactions += [LightTransaction.pool[count]]
+                limit += LightTransaction.pool[count].usedGas
+            elif (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo != shard and LightTransaction.pool[count].shardFrom == shard):
+            elif (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo == shard and LightTransaction.pool[count].shardFrom != shard and LightTransaction.pool[count].isReceipt == True):
+        return transactions, limit
 
     def resetState():
         LightTransaction.pool = []
