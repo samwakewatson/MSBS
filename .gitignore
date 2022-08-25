@@ -52,3 +52,5 @@ __pycache__/Config.cpython-310.pyc
 *.pyc
 
 *.txt
+
+!Data_sets.xlsx
