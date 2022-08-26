@@ -49,6 +49,10 @@ if __name__ == '__main__':
             x2.append(datapoint["crossShardProp"])
             y2.append(datapoint["crossShardTxLatency"])
 
+    print(x1)
+    print(y1)
+    print(y2)
+
     plt.scatter(x1,y1)
     plt.scatter(x2,y2)
 

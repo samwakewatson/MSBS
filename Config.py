@@ -62,7 +62,7 @@ class Config:
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each epoch
 
     ''' Simulation Parameters '''
-    simTime = 500 # the simulation length (in seconds)
+    simTime = 5000 # the simulation length (in seconds)
     Runs = 2  # Number of simulation runs
 
 
