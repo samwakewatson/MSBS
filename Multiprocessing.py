@@ -18,7 +18,7 @@ if __name__ == '__main__':
     configs = json.load(f)
     f.close()
 
-    numThreads = 6
+    numThreads = 10
 
     process_pool = multiprocessing.Pool(processes = numThreads)                                                      
     results = process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
