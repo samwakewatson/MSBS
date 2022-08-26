@@ -141,14 +141,26 @@ class LightTransaction():
         return transactions, limit'''
 
         LightTransaction.pool.sort(key=lambda x: x.gasPrice, reverse=True)
-
+        #this is possibly the worst 20 lines of code ever written
         while count < len(LightTransaction.pool):
             if  (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo == shard and LightTransaction.pool[count].shardFrom == shard):
                 blocklimit -= LightTransaction.pool[count].usedGas
                 transactions += [LightTransaction.pool[count]]
                 limit += LightTransaction.pool[count].usedGas
+                LightTransaction.pool.remove(LightTransaction.pool[count])
+                count -= 1
             elif (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo != shard and LightTransaction.pool[count].shardFrom == shard):
+                blocklimit -= LightTransaction.pool[count].usedGas
+                transactions += [copy.deepcopy(LightTransaction.pool[count])]
+                limit += LightTransaction.pool[count].usedGas
+                LightTransaction.pool[count].isReceipt = True #need to make a new tx 
             elif (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo == shard and LightTransaction.pool[count].shardFrom != shard and LightTransaction.pool[count].isReceipt == True):
+                blocklimit -= LightTransaction.pool[count].usedGas
+                transactions += [LightTransaction.pool[count]]
+                limit += LightTransaction.pool[count].usedGas
+                LightTransaction.pool.remove(LightTransaction.pool[count]) 
+                count -= 1
+            count += 1
         return transactions, limit
 
     def resetState():
