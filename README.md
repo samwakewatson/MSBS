@@ -1,9 +1,9 @@
 # Modular Sharded Blockchain Simulator (MSBS)
 
 ## What is MSBS?
-**MSBS** is an open source sharded blockchain simulator based on the BlockSim simulator. MSBS aims to provide simulation constructs that are intuitive, hide unnecessary detail and can be easily manipulated to be applied to a large set of blockchains design and deployment questions (related to performance, reliability, security or other properties of interest). At the core of BlockSim is a Base Model, which contains a number of functional blocks (e.g., blocks, transactions and nodes) common across blockchains, that can be extended and configured as suited for the system and study of interest. MSBS is implemented in **Python**.
+**MSBS** is an open source sharded blockchain simulator based on the BlockSim simulator. It is a transaction level blockchain simulator that aims to accommodate the more complex systems of consensus sharded blockchains implement. The simulator aims to be applicable to the majority of sharded blockchain systems, and adapts the consensus, network, and incentives layer abstractions seen in BlockSim to the case of sharded blockchains. MSBS is implemented in **Python**.
 
-For more details about BlockSim, we refer to our journal paper that can be freely accessed online https://www.frontiersin.org/articles/10.3389/fbloc.2020.00028/full
+A paper detailing the design of our simulator will be released in the near future.
 
 ## Installation and Requirements
 
@@ -24,19 +24,18 @@ Before you can use BlockSim  simulator, you need to have **Python version 3 or a
 
 ## Running the simulator
 
-Before you run the simulator, you can access the configuration file *InputsConfig.py* to choose the model of interest (Base Model 0, Bitcoin Model 1 and Ethereum Model 2) and to set up the related parameters.
-The parameters include the number of nodes (and their fraction of hash power), the block interval time, the block propagation delays, the block and transaction sizes, the block rewards, the tranaction fees etc.
-Each model has a slightly different (or additional) parameters to capture it.
+Before you run the simulator, you must specify a base config in the Config.py file. Once this is done, you can specify variables to alter between each run by modifying the experimentConfigs.json file. A few other alterations may need to be made in the Main.py and Multiprocessing.py files to ensure the config is updated on each run, and that the automatic graph plotting is functioning as desired.
 
-To run the simulator, one needs to trigger the main class *Main.py* either from the command line
+To run the simulator, one needs to trigger the main class in *Multiprocessing.py* 
+> python Multiprocessing.py
+
+Alternatively, to run only a single simulation one can run the main class in *Main.py* (however this will require minor modification to the main function)
 > python Main.py
-
-or using any Python editor such as Spyder.
 
 ## Statistics and Results
 
-The results of the simulator is printed in an excel file at the end of the simulation. The results include the blockchain ledger, number of blocks mined, number of stale (uncles) blocks and the rewards gained by each miner etc. 
+There are several possible formats for results. Excel files providing a detailed per block breakdown of the simulation are automatically produced. The main function returns a results object containing data on the simulation configuration and certain statistics from the simulation, and this can be leveraged to automatically plot graphs of the results. The code for this is contained in Multiprocessing.py
 
 ## Contact
 
-For any query about how to use or even extend the simulator, feel free to contact me **alharbi.maher@gmail.com**
+I can be contacted at **swakewatson@gmail.com** for any questions about the simulator or how to extend it.
