@@ -27,7 +27,6 @@ elif p.model == 4:
     from Models.HarmonyONE.Node import Node
     from Models.Incentives import Incentives'''
 
-#note that we have 2 consensus files required for a lot of stuff
 '''match p.shardConsensus:
     case 0:
         from Consensus.Delay import Consensus
@@ -109,7 +108,7 @@ def main(id, config):
         fname = "ID{0}.xlsx".format(id)
         # print all the simulation results in an excel file
         results.append({"Nn": p.Nn, "Tn" : p.Tn, "crossShardProp" : p.crossShardProportion, "sameShardTxLatency" : Statistics.returnValue("sameShardTxLatency"),
-         "crossShardTxLatency" : Statistics.returnValue("crossShardTxLatency"), "totalTx" : Statistics.returnValue("totalTx")})
+         "crossShardTxLatency" : Statistics.returnValue("crossShardTxLatency"), "totalTx" : Statistics.returnValue("totalTx"), "perShardFees": Statistics.returnValue("perShardFees")})
         Statistics.print_to_excel(fname)
         Statistics.reset2()  # reset profit results
     print("Process finished --- %s seconds ---" % (time.time() - start_time))
