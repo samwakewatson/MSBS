@@ -1,7 +1,7 @@
 # Modular Sharded Blockchain Simulator (MSBS)
 
 ## What is MSBS?
-**MSBS** is an open source sharded blockchain simulator based on the BlockSim simulator. It is a transaction level blockchain simulator that aims to accommodate the more complex systems of consensus sharded blockchains implement. The simulator aims to be applicable to the majority of sharded blockchain systems, and adapts the consensus, network, and incentives layer abstractions seen in BlockSim to the case of sharded blockchains. MSBS is implemented in **Python**.
+**MSBS** is an open source sharded blockchain simulator based on the BlockSim simulator. It is a transaction level blockchain simulator that aims to accommodate the more complex consensus mechanisms implemented by sharded blockchains. The simulator aims to be applicable to the majority of sharded blockchain systems, and adapts the consensus, network, and incentives layer abstractions seen in BlockSim to the case of sharded blockchains. MSBS is implemented in **Python**.
 
 A paper detailing the design of our simulator will be released in the near future.
 
