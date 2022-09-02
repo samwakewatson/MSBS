@@ -28,22 +28,20 @@ class Config:
     #0 = HarmonyONE
     presetConfig = 0
 
-    #is this a bad solution? it's probably bad to put all the nodes here, though where else would they go?
     ''' Block Parameters '''
     Binterval = 2  # Average time (in seconds)for creating a block in the blockchain
     Bsize = 1.0
     Blimit = 80000000  # Gas limit
     Bdelay = 0.2  # average block propogation delay in seconds, #Ref: https://bitslog.wordpress.com/2016/04/28/uncle-mining-an-ethereum-consensus-protocol-flaw/
     Breward = 12.5  # Reward for mining a block
-    slotTime = 2 #time each slot takes - doesn't exactly mimic harmony
-    epochLength = 1000 #how many slots in an epoch - node only the beacon chain determines epoch in harmonyONE
+    slotTime = 2 #time each slot takes
+    epochLength = 1000 #how many slots in an epoch
     slotLeaders = [] 
 
     ''' Transaction Parameters '''
     hasTrans = True  # True/False to enable/disable transactions in the simulator
     Ttechnique = "Light"  # Full/Light to specify the way of modelling transactions
     Tn = 140  # The rate of the number of transactions to be created per second
-    # The average transaction propagation delay in seconds (Only if Full technique is used)
     Tdelay = 1
     Tfee = 0.000062  # The average transaction fee
     Tsize = 0.000546  # The average transaction size  in MB
@@ -62,8 +60,8 @@ class Config:
     cuckooRuleConstant = 0.3 #proportion of nodes that need to be moved each epoch
 
     ''' Simulation Parameters '''
-    simTime = 5000 # the simulation length (in seconds)
-    Runs = 2  # Number of simulation runs
+    simTime = 200 # the simulation length (in seconds)
+    Runs = 4  # Number of simulation runs
 
 
 

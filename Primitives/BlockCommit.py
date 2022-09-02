@@ -1,11 +1,6 @@
 from Config import Config as p
 from Primitives.Transaction import LightTransaction
 
-#Currently BlockCommit kinda does way too much
-#We can maybe stand it doing most of the stuff set out here
-#But a lot of what it does in the specialised models really shouldn't be there
-#Ideally we'll move a lot of stuff to the consensus classes, or maybe make them properties of the nodes themselves
-#We want to keep it general though, so maybe a BlockCommit isn't too bad
 
 class BlockCommit:
 
@@ -71,15 +66,6 @@ class BlockCommit:
         node.change_block(shard, newBlock.depth, newBlock)
 
 
-        #this doesn't work and leads to progressively smaller committees, it forces nodes out of the network if we have receive events in the wrong order
-        #but should we ever have events in the wrong order?
-        '''if node.blockchain[shard][-1].id == miner.blockchain[shard][-2].id:
-            node.blockchain[shard].append(miner.blockchain[shard][-1])'''
-
-    #sync all shards?
-    #we want them to download just the checkpoint blocks
-    #need to figure out how to count properly
-    #can use same as check epoch
     def sync_shards():
         #find the longest possible combination of shards
         blockchain = []

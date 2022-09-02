@@ -11,6 +11,6 @@ class Node(BaseNode):
         self.transactionsPool= []
         self.blocks= []# total number of blocks mined in the main chain
         self.balance= 0# to count all reward that a miner made, including block rewards + uncle rewards + transactions fees
-        self.effectiveStake = 0 #need this for harmony, do I need a separate Harmony folder?
+        self.effectiveStake = 0 #harmony ONE effective stake
         self.committees = [] #number of votes on each shard that this node has
         

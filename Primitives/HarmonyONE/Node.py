@@ -2,8 +2,6 @@ from Primitives.Block import Block
 from Primitives.Node import Node as BaseNode
 
 
-#change this to storing multiple chains. will be a massive pain and will break like half the program.
-#need to fix consensus in particular
 class Node(BaseNode):
     def __init__(self,id,stake):
         '''Initialize a new miner named name with hashrate measured in hashes per second.'''

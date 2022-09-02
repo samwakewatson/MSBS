@@ -66,6 +66,7 @@ class BlockCommit(BaseBlockCommit):
 
     #confusingly named - each node checks if it is the leader/ allowed to make a block at the start of the slot
     #this isnt really how it works in harmony, each node is assigned slots
+    #note that this function is not currently used
     def check_leader(event):
         for s in range(0,p.numShards):
             Scheduler.create_block_event(p.slotLeaders[s][int(event.time/p.slotTime) % len(p.slotLeaders[s])], s, event.time) 
@@ -75,8 +76,6 @@ class BlockCommit(BaseBlockCommit):
                     Scheduler.create_block_event(node, s, event.time)'''
         
 
-    #this version shuffles all of the committees, which would have a massive overhead
-    #also this is what handles the entire new epoch event, so we probably need to alter it
     def shuffle_committees(event):
         #this assigns committees randomly based on the number of votes they have, not really how Harmony works
         '''allVotes = []
@@ -170,7 +169,7 @@ class BlockCommit(BaseBlockCommit):
 
         Scheduler.new_slot_event(2)
         #assign all of the nodes votes in the various committees
-        #this needs to be completely changed -effective stake changes the game
+        #this needs to be completely changed to accommodate effective stake
         '''for node in p.NODES:
             votes = c.calculate_votes(node)
             for v in range(0, votes):
@@ -217,8 +216,5 @@ class BlockCommit(BaseBlockCommit):
         #Scheduler.new_slot_event(block.timestamp + delay + 0.001) #note the 0.001 is just to make sure a new slot doesnt happen before all the receive eventsE
         if ((block.depth % p.epochLength) == 0) and (block.shard == 0) and (block.depth != 0):
             Scheduler.new_epoch_event(block.timestamp + 0.001)
-            #print(block.depth)
-            #print(block.shard)
-            #print(block.miner)
             return
         Scheduler.create_block_event(p.slotLeaders[block.shard][(block.depth + 1) % len(p.slotLeaders[block.shard])], block.shard, block.timestamp + delay)#we need to add the network delay

@@ -14,7 +14,7 @@ class Node(object):
         self.id= id
         self.blockchain= []
         self.transactionsPool= []
-        self.blocks= 0#[]
+        self.blocks= 0
         self.balance= 0
 
     # Generate the Genesis block for each shard and append it to the local blockchain for all nodes
@@ -51,7 +51,6 @@ class Node(object):
     def change_block(self, shard, height, newBlock):
         len = self.blockchain_length(shard)
         
-        #should be redundant if we're using this right
         if height > self.blockchain_height(shard):
             self.blockchain[shard].append(newBlock)
             return 

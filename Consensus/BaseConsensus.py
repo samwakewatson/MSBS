@@ -4,7 +4,6 @@ from Primitives.Node import Node
 import random
 
 
-#Realisitically all of this needs tearing apart
 class Consensus:
     global_chain=[] # the accepted global chain after resovling the forks
 

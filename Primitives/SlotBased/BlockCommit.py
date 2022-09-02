@@ -63,7 +63,7 @@ class BlockCommit(BaseBlockCommit):
             #BlockCommit.generate_next_block(miner,eventTime)# Start mining or working on the next block
 
 
-    #confusingly named - each node checks if it is the leader/ allowed to make a block at the start of the slot
+    #each node checks if it is the leader/ allowed to make a block at the start of the slot
     #this isnt really how it works in harmony, each node is assigned slots
     def check_leader(event):
         for node in p.NODES:
@@ -73,9 +73,9 @@ class BlockCommit(BaseBlockCommit):
         
 
     #this version shuffles all of the committees, which would have a massive overhead
-    #also this is what handles the entire new epoch event, so we probably need to alter it
+    #also this is what handles the entire new epoch event
     def shuffle_committees(event):
-        #this assigns committees randomly based on the number of votes they have, not really how Harmony works
+        #this assigns committees randomly based on the number of votes they have
         '''allVotes = []
         for node in p.NODES:
             node.committees = []
@@ -103,8 +103,6 @@ class BlockCommit(BaseBlockCommit):
             node.epoch += 1
 
         #Scheduler.cancel_new_blocks()
-
-        #we want to make sure there's a delay before the next block (for each chain)
 
         ShardAssignment.shuffle_committees()
 
@@ -157,8 +155,7 @@ class BlockCommit(BaseBlockCommit):
                  blockTime = currentTime + c.Protocol(node) # time when miner x generate the next block
                  Scheduler.create_block_event(node,blockTime)'''
 
-    #change this back to longest chain rule (technically densest chain)
-    #though wait if we're using checkpointing then we need this to only update the most recent stuff
+    #note this is not longest chain rule
     def update_local_blockchain(node, miner, shard, depth):
         i= miner.epoch * p.epochLength
         while (i < depth):
@@ -185,7 +182,6 @@ class BlockCommit(BaseBlockCommit):
             Scheduler.new_slot_event(currentTime)
 
         #assign all of the nodes votes in the various committees
-        #this needs to be completely changed -effective stake changes the game
         for node in p.NODES:
             votes = c.calculate_votes(node)
             for v in range(0, votes):

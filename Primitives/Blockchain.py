@@ -1,9 +1,6 @@
 from Block import Block
 from Config import Config as p
 
-#we want to make a blockchain object which is easier to use and has simpler behaviour
-#we want it to be able to accomodate checkpointing etc.
-
 class Blockchain:
     chain = []
 
@@ -18,7 +15,7 @@ class Blockchain:
     def last_block(self, shard):
         return self.chain[shard][-1]
 
-    #we want to add blockchain logic to this
+    #to do: add blockchain validation logic to this
     def append_block(self,shard, block):
         self.chain[shard].append(block)
 

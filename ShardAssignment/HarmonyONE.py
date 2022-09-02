@@ -30,6 +30,6 @@ class ShardAssignment:
                 p.NODES[nodeID].committees = random.choice(committeeOptions) #note this can send members back to their own shard, do we want this?
 
     #time taken for enough (all) nodes in each committee to be synched with the overall committee
-    #note this is a bit cursed as it's just an oversimplistic delay model
+    #simplistic constant delay model
     def sync_delay():
         return 1

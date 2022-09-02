@@ -10,7 +10,6 @@ import json
 from matplotlib import pyplot as plt
 
 
-#ids = [i for i in range (0,len(configs["configs"]))]                            
                                                                                 
 if __name__ == '__main__': 
 
@@ -18,7 +17,7 @@ if __name__ == '__main__':
     configs = json.load(f)
     f.close()
 
-    numThreads = 10
+    numThreads = 6
 
     process_pool = multiprocessing.Pool(processes = numThreads)                                                      
     results = process_pool.starmap(main, [(i, configs["configs"][i]) for i in range (0, len(configs["configs"]))])
@@ -49,12 +48,24 @@ if __name__ == '__main__':
             x2.append(datapoint["crossShardProp"])
             y2.append(datapoint["crossShardTxLatency"])
 
+    x3 = []
+    y3 = []
+    for resultSet in results:
+        for datapoint in resultSet:
+            for i in datapoint["perShardFees"]:
+                x3.append(datapoint["crossShardProp"])
+                y3.append(i)
+
     print(x1)
     print(y1)
     print(y2)
 
-    plt.scatter(x1,y1)
-    plt.scatter(x2,y2)
+    #plt.scatter(x1,y1)
+    #plt.scatter(x2,y2)
+    plt.scatter(x3,y3)
+
+    plt.xlabel("crossShardProp")
+    plt.ylabel("per shard fees")
 
     plt.show()
 

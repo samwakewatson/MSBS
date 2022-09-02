@@ -31,17 +31,10 @@ What do we want this module to do?
 
 class StateCompaction:
 
-    #we want this to return a chain of checkpoints i.e. epoch start blocks
-    #then the most recent block is classed as something
-    #this is going to break a lot of stuff
-
-
-    #this isnt accurate, as the shards arent synched so we dont know exactly when the checkpoint blocks will be
+    #this may not be accurate, as the shards arent necessarily synched so we dont know exactly when the checkpoint blocks will be
     def checkpointChain(shard):
-        #c.fork_resolution()
         c.fork_resolution()
         checkpoints = c.global_chain[shard][0::p.epochLength]
-        #print(checkpoints)
         for node in p.NODES:
             lastBlock = node.blockchain_height(shard)
             '''if lastBlock != c.global_chain[shard][-1].depth:

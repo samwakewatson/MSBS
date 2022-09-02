@@ -1,4 +1,3 @@
-from audioop import cross
 from Config import Config as p
 from Consensus.BaseConsensus import Consensus as c
 from Incentives.Incentives import Incentives
@@ -26,7 +25,6 @@ class Statistics:
     profits= [[0 for x in range(7)] for y in range(p.Runs * len(p.NODES))] # rows number of miners * number of runs, columns =7
     index=0
     chain=[]
-    #network = Network.latencyTable #VERY VERY SUS IMPLEMENTATION - DO WE KNOW THIS IS THE SAME INSTANCE THAT IS USED IN THE REST OF THE PROGRAM?????
 
     def calculate():
         Statistics.global_chain() # print the global chain
@@ -47,17 +45,11 @@ class Statistics:
                 Statistics.uncleBlocks = 0
                 Statistics.numTransactions += len(b.transactions)
                 for t in b.transactions:
-                    #print(t)
-                    #print(t.timestamp)
-                    #print(b)
-                    #print(b.timestamp)
-                    #transactionDelays.append(float(b.timestamp - t.timestamp[0]))
                     fees[s].append(t.fee)
                     if t.isReceipt == False:
                         transactionDelays.append(float(b.timestamp - t.timestamp))
                     else:
                         crossShardTxDelays.append(float(b.timestamp - t.timestamp))
-        #this breaks if we have no cross shard tx
         try:
             Statistics.transactionLatency = statistics.mean(transactionDelays)
         except:
@@ -88,12 +80,6 @@ class Statistics:
             Statistics.profits[i][4]=0
             Statistics.profits[i][5]=0
             Statistics.profits[i][6]= m.balance
-
-        #remove this once we fix the above
-        '''for m in p.NODES:
-            i = Statistics.index + m.id * p.Runs
-            Statistics.profits[i][0]= m.id
-            Statistics.profits[i][1]= "NA"'''
 
         Statistics.index+=1
 
@@ -152,12 +138,9 @@ class Statistics:
             return Statistics.transactionLatency
         elif value == "crossShardTxLatency":
             return Statistics.crossShardTxLatency
+        elif value == "perShardFees":
+            return Statistics.perShardFees
         
-
-    ########################################################### Draw some graphs ##########################################################
-    #so we want to save all the results of the various simulations and output some graphs all at once
-    #so we need to fix the multithreading, or at least store some data between runs
-    #what in particular do we need graphs of? tps generated vs latency, tps vs ?, miner profits?
 
     ########################################################### Reset all global variables used to calculate the simulation results ###########################################################################################
     def reset():

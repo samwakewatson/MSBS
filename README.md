@@ -17,6 +17,10 @@ Before you can use BlockSim  simulator, you need to have **Python version 3 or a
 >pip install sklearn
 - xlsxwriter
 >pip install xlsxwriter
+- matplotlib
+>pip install matplotlib
+- openpyxl
+>pip install openpyxl
 
 ## Running the simulator
 

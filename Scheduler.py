@@ -13,7 +13,6 @@ else:
 class Scheduler:
 
     # Schedule a block creation event for a miner and add it to the event list
-    #Do we need to modify this? Or can we leave it as it represents a leader election
     def create_block_event(miner, shard, eventTime):
         eventType = "create_block"
         if eventTime <= p.simTime:
@@ -42,7 +41,7 @@ class Scheduler:
             Queue.add_event(event)
 
     # Schedule a block receiving event for a node and add it to the event list
-    def receive_block_event(recipient, block, blockDelay): #Is this blockdelay any different from the hardcoded one???
+    def receive_block_event(recipient, block, blockDelay): 
         receive_block_time = block.timestamp + blockDelay
         if receive_block_time <= p.simTime:
             e = Event("receive_block", recipient.id, receive_block_time, block)

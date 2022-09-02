@@ -2,10 +2,7 @@ import random
 import numpy 
 from Config import Config as p
 
-#This is very simplistic and also does not retain the same values for each pair of nodes. 
-#We want to expand this and also allow us to change the values as time goes on, i.e. schedule in nodes going offline etc.
-#Note that this will massively increase the overall complexity
-
+#BlockSim legacy code
 '''
 class Network:
     
@@ -22,8 +19,6 @@ class Network:
 
     
 class Network:
-
-    #Note this is not currently symmetric, so we have some bizarre consistency stuff, try to alter this
     latencyTable = numpy.zeros((p.Nn, p.Nn))
     for i in range (0, p.Nn):
         for j in range(i, p.Nn):
@@ -43,7 +38,7 @@ class Network:
     #            self.latencyTable[i][j] = random.expovariate(1/p.Bdelay)
 
     
-    #make this actually work, and add another function to put a node back online
+    #not currently supported
     def node_offline(self, node):
         self.latencyTable[node] = numpy.zeros(p.Nn)
     

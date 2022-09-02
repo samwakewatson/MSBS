@@ -75,7 +75,7 @@ class LightTransaction():
             tx.shardFrom = random.randint(0,p.numShards-1)
 
             if i < p.crossShardProportion * Psize:
-                tx.shardTo = random.randint(0,p.numShards-1)#this doesn't really give us as many as we want it to, can return sameshard tx
+                tx.shardTo = random.randint(0,p.numShards-1)#needs fix: can produce same shard tx
             else:
                 tx.shardTo = tx.shardFrom
 
@@ -141,7 +141,6 @@ class LightTransaction():
         return transactions, limit'''
 
         LightTransaction.pool.sort(key=lambda x: x.gasPrice, reverse=True)
-        #this is possibly the worst 20 lines of code ever written
         while count < len(LightTransaction.pool):
             if  (blocklimit >= LightTransaction.pool[count].gasLimit and LightTransaction.pool[count].timestamp <= currentTime and LightTransaction.pool[count].shardTo == shard and LightTransaction.pool[count].shardFrom == shard):
                 blocklimit -= LightTransaction.pool[count].usedGas

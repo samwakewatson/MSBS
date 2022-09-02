@@ -1,8 +1,6 @@
 import operator
 from Config import Config as p
 
-#We need to make this more general
-#Take it down to just type and time?
 class Event(object):
 
     """ Defines the Event.
@@ -28,7 +26,6 @@ class Queue:
         del Queue.event_list[0]
     def get_next_event():
         Queue.event_list.sort(key=operator.attrgetter('time'), reverse=False) # sort events -> earliest one first
-        #print(Queue.event_list[0].type, Queue.event_list[0].time)
         return Queue.event_list[0]
     def size():
         return len(Queue.event_list)
